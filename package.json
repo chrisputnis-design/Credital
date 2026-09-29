@@ -1,0 +1,13 @@
+{
+  "name": "credital-landing",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Credital landing page: single-file source (index.html) plus a build that precompiles Tailwind.",
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

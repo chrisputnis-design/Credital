@@ -1,0 +1,1571 @@
+<!doctype html>
+<html lang="en" data-audience="lend">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Credital: Lend across borders. Borrow without a bank.</title>
+  <meta name="description" content="Credital is a global peer-to-peer lending marketplace. Lenders earn annualised yield on rated, ID-verified consumer loans. Borrowers get fast, fairly priced credit without a bank. Capital at risk.">
+  <meta name="theme-color" content="#0A1F44">
+  <meta property="og:title" content="Credital: Lend across borders. Borrow without a bank.">
+  <meta property="og:description" content="Peer-to-peer lending with bond-style credit ratings, transparent APR pricing and cross-border reach. Join the waitlist.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%2334D3A0'/%3E%3Cpath d='M21.5 11.2A7.2 7.2 0 1 0 21.5 20.8' fill='none' stroke='%230A1F44' stroke-width='3.2' stroke-linecap='round'/%3E%3Ccircle cx='22.8' cy='16' r='2.1' fill='%230A1F44'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { 950: '#050F24', 900: '#0A1F44', 800: '#102B58', 700: '#1B3A6E' },
+            accent: { DEFAULT: '#0B7A56', dark: '#085F43', light: '#34D3A0', tint: '#E7F6F0' },
+            paper: '#F5F7FA',
+            line: '#E2E8F0',
+            edge: '#8393AA'
+          },
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif']
+          },
+          boxShadow: {
+            soft: '0 1px 2px rgba(10,31,68,.06), 0 10px 30px rgba(10,31,68,.08)',
+            lift: '0 24px 60px -16px rgba(5,15,36,.45)'
+          }
+        }
+      }
+    };
+  </script>
+
+  <style type="text/tailwindcss">
+    @layer base {
+      html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+      body { @apply bg-white font-sans text-slate-700 antialiased; }
+    }
+    @layer components {
+      .container-x { @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8; }
+      .section { @apply py-16 sm:py-24; }
+      .eyebrow { @apply text-sm font-semibold uppercase tracking-wider text-accent; }
+      .on-dark .eyebrow { @apply text-accent-light; }
+      .h2 { @apply text-3xl font-bold leading-tight tracking-tight text-navy-900 sm:text-4xl; }
+      .on-dark .h2 { @apply text-white; }
+      .lead { @apply text-lg leading-relaxed text-slate-600; }
+      .on-dark .lead { @apply text-white/75; }
+      .card { @apply rounded-2xl border border-line bg-white; }
+
+      .btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-base font-semibold transition-colors duration-150 sm:whitespace-nowrap; }
+      .btn-primary { @apply bg-accent text-white hover:bg-accent-dark; }
+      .btn-mint { @apply bg-accent-light text-navy-900 hover:bg-[#5FE3B8]; }
+      .btn-ghost { @apply border border-white/30 text-white hover:bg-white/10; }
+      .btn-outline { @apply border border-navy-900 text-navy-900 hover:bg-navy-900 hover:text-white; }
+
+      /* Segmented radio control (works with keyboard arrows natively) */
+      .seg { @apply inline-flex rounded-full p-1; }
+      .seg-dark { @apply bg-white/10; }
+      .seg-light { @apply bg-slate-100; }
+      .seg-label { @apply block cursor-pointer select-none rounded-full px-4 py-2.5 text-sm font-semibold transition-colors sm:px-5; }
+
+      .pill-label { @apply flex h-11 cursor-pointer select-none items-center justify-center rounded-lg border border-edge bg-white text-sm font-semibold text-navy-900 transition-colors hover:bg-slate-50 peer-checked:border-navy-900 peer-checked:bg-navy-900 peer-checked:text-white; }
+
+      .field { @apply w-full rounded-xl border border-edge bg-white px-4 py-3 text-base text-navy-900 placeholder:text-slate-500; }
+      .ico { @apply h-5 w-5 shrink-0 fill-none stroke-current; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+      .icon-box { @apply inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent-tint text-accent; }
+      .on-dark .icon-box { @apply bg-accent-light/15 text-accent-light; }
+      .tag { @apply inline-flex items-center rounded-full bg-accent-tint px-2.5 py-1 text-xs font-semibold text-accent-dark; }
+      .placeholder-tag { @apply inline-flex items-center rounded-full border border-dashed border-slate-500 bg-white px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-slate-600; }
+    }
+  </style>
+
+  <style>
+    :root { --focus: #0B7A56; }
+    .on-dark { --focus: #5EEAC0; }
+    :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+    [hidden] { display: none !important; }
+    .seg-dark .seg-label { color: rgba(255,255,255,.85); }
+    .seg-dark .seg-label:hover { color: #fff; }
+    .seg-dark .peer:checked + .seg-label { background: #fff; color: #0A1F44; }
+    .seg-light .seg-label { color: #334155; }
+    .seg-light .seg-label:hover { color: #0A1F44; }
+    .seg-light .peer:checked + .seg-label { background: #0A1F44; color: #fff; }
+    .peer:focus-visible + .seg-label, .peer:focus-visible + .pill-label { outline: 3px solid var(--focus); outline-offset: 2px; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; background: #fff; color: #0A1F44; padding: .75rem 1.25rem; border-radius: .75rem; font-weight: 600; }
+    .skip-link:focus { top: 1rem; }
+
+    /* Audience switch: one attribute on <html> drives every tailored element */
+    html[data-audience="lend"] [data-show="borrow"],
+    html[data-audience="borrow"] [data-show="lend"] { display: none !important; }
+    .stack { display: grid; }
+    .stack > * { grid-area: 1 / 1; }
+    html[data-audience="lend"] .stack > [data-variant="borrow"],
+    html[data-audience="borrow"] .stack > [data-variant="lend"] { visibility: hidden; }
+    html[data-audience="lend"] .h1-lend, html[data-audience="borrow"] .h1-borrow { color: #34D3A0; }
+
+    /* Range sliders */
+    input[type=range].rng { -webkit-appearance: none; appearance: none; width: 100%; height: 32px; background: transparent; cursor: pointer; --p: 0%; }
+    .rng::-webkit-slider-runnable-track { height: 6px; border-radius: 999px; background: linear-gradient(to right, #0B7A56 var(--p), #8393AA var(--p)); }
+    .rng::-moz-range-track { height: 6px; border-radius: 999px; background: #8393AA; }
+    .rng::-moz-range-progress { height: 6px; border-radius: 999px; background: #0B7A56; }
+    .rng::-webkit-slider-thumb { -webkit-appearance: none; margin-top: -10px; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 4px solid #0B7A56; box-shadow: 0 1px 5px rgba(10,31,68,.35); }
+    .rng::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 4px solid #0B7A56; box-shadow: 0 1px 5px rgba(10,31,68,.35); }
+    .rng:focus-visible { outline: none; }
+    .rng:focus-visible::-webkit-slider-thumb { outline: 3px solid #0A1F44; outline-offset: 3px; }
+    .rng:focus-visible::-moz-range-thumb { outline: 3px solid #0A1F44; outline-offset: 3px; }
+
+    /* FAQ */
+    summary { list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    details[open] > summary .faq-plus { transform: rotate(45deg); }
+    .faq-plus { transition: transform .2s ease; }
+
+    /* Stepper connector on desktop */
+    @media (min-width: 1024px) {
+      .steps > li:not(:last-child)::after { content: ""; position: absolute; top: 2.65rem; left: calc(100% - .25rem); width: 1.5rem; height: 2px; background: #C6D2E1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Icon sprite -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M7 21h10M5 7h14M5 7l-3 7a3 3 0 0 0 6 0L5 7zM19 7l-3 7a3 3 0 0 0 6 0l-3-7z"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-trend" viewBox="0 0 24 24"><path d="m3 17 6-6 4 4 8-8M15 7h6v6"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.2 8 8 9 4.8-1 8-4.5 8-9V6l-8-3z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-id" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M6 16c.6-1.5 1.8-2 3-2s2.4.5 3 2M14 10h4M14 14h4"/></symbol>
+    <symbol id="i-data" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></symbol>
+    <symbol id="i-recover" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></symbol>
+    <symbol id="i-vault" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="12" cy="12" r="3.5"/><path d="M12 8.5V6M12 18v-2.5"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17.5v.01"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/></symbol>
+    <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ============ HEADER ============ -->
+  <header class="on-dark sticky top-0 z-50 border-b border-white/10 bg-navy-900/95 backdrop-blur">
+    <div class="container-x flex h-16 items-center justify-between gap-4">
+      <a href="#top" class="flex items-center gap-2.5 text-white" aria-label="Credital, back to top">
+        <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#34D3A0"/><path d="M21.5 11.2A7.2 7.2 0 1 0 21.5 20.8" fill="none" stroke="#0A1F44" stroke-width="3.2" stroke-linecap="round"/><circle cx="22.8" cy="16" r="2.1" fill="#0A1F44"/></svg>
+        <span class="text-xl font-bold tracking-tight">Credital</span>
+      </a>
+
+      <nav aria-label="Primary" class="hidden lg:block">
+        <ul class="flex items-center gap-7 text-sm font-medium text-white/80">
+          <li><a class="hover:text-white" href="#how">How it works</a></li>
+          <li><a class="hover:text-white" href="#rating-engine">Ratings &amp; yield</a></li>
+          <li><a class="hover:text-white" href="#lend">Lend</a></li>
+          <li><a class="hover:text-white" href="#borrow">Borrow</a></li>
+          <li><a class="hover:text-white" href="#trust">Trust &amp; risk</a></li>
+          <li><a class="hover:text-white" href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <a href="#waitlist" class="btn btn-mint !px-5 !py-2.5 text-sm">Join the waitlist</a>
+        <button id="menu-btn" type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full text-white hover:bg-white/10 lg:hidden" aria-expanded="false" aria-controls="mobile-nav">
+          <svg class="ico" id="menu-ico" aria-hidden="true"><use href="#i-menu"/></svg>
+          <span class="sr-only">Menu</span>
+        </button>
+      </div>
+    </div>
+    <nav id="mobile-nav" aria-label="Mobile" class="border-t border-white/10 lg:hidden" hidden>
+      <ul class="container-x grid gap-1 py-3 text-base font-medium text-white/90">
+        <li><a class="block rounded-lg px-3 py-3 hover:bg-white/10" href="#how">How it works</a></li>
+        <li><a class="block rounded-lg px-3 py-3 hover:bg-white/10" href="#rating-engine">Ratings &amp; yield</a></li>
+        <li><a class="block rounded-lg px-3 py-3 hover:bg-white/10" href="#lend">Why lend</a></li>
+        <li><a class="block rounded-lg px-3 py-3 hover:bg-white/10" href="#borrow">Why borrow</a></li>
+        <li><a class="block rounded-lg px-3 py-3 hover:bg-white/10" href="#trust">Trust &amp; risk</a></li>
+        <li><a class="block rounded-lg px-3 py-3 hover:bg-white/10" href="#faq">FAQ</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ============ 1. HERO ============ -->
+    <section id="top" class="on-dark relative overflow-hidden bg-navy-900" aria-labelledby="hero-h">
+      <div class="pointer-events-none absolute inset-0" aria-hidden="true" style="background: radial-gradient(55% 55% at 78% 42%, rgba(52,211,160,.17), transparent 70%), radial-gradient(50% 60% at 0% 0%, rgba(46,79,134,.55), transparent 70%);"></div>
+
+      <div class="container-x relative grid grid-cols-1 items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1.12fr_0.88fr] lg:gap-8 lg:py-20">
+        <div>
+          <p class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-white/85">
+            <span class="h-1.5 w-1.5 rounded-full bg-accent-light" aria-hidden="true"></span>
+            Peer-to-peer lending &middot; Early access waitlist open
+          </p>
+
+          <h1 id="hero-h" class="mt-5 text-[2.4rem] font-extrabold leading-[1.06] tracking-tight text-white sm:text-5xl lg:text-[3.3rem]">
+            <span class="h1-lend block">Lend across borders.</span>
+            <span class="h1-borrow block">Borrow without a bank.</span>
+          </h1>
+
+          <fieldset class="mt-7">
+            <legend class="sr-only">I am here to</legend>
+            <div class="seg seg-dark">
+              <div>
+                <input class="peer sr-only" type="radio" name="aud-hero" id="aud-hero-lend" value="lend" data-aud-radio checked>
+                <label class="seg-label" for="aud-hero-lend">I want to lend</label>
+              </div>
+              <div>
+                <input class="peer sr-only" type="radio" name="aud-hero" id="aud-hero-borrow" value="borrow" data-aud-radio>
+                <label class="seg-label" for="aud-hero-borrow">I want to borrow</label>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="stack mt-6 max-w-xl">
+            <div data-variant="lend">
+              <p class="lead">Fund rated, ID-verified borrowers worldwide and earn the yield banks earn on consumer lending. Every loan shows its credit rating, annualised rate and currency before you commit a cent.</p>
+              <div class="mt-7 flex flex-col gap-3 sm:flex-row">
+                <a href="#waitlist" class="btn btn-mint">Join the lender waitlist <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+                <a href="#rating-engine" class="btn btn-ghost">Try the yield calculator</a>
+              </div>
+            </div>
+            <div data-variant="borrow">
+              <p class="lead">Get $100 to $5,000 without the bank queue. We rate you on how you actually pay (mobile money, rent, utilities) and show your exact APR and every fee before you accept.</p>
+              <div class="mt-7 flex flex-col gap-3 sm:flex-row">
+                <a href="#waitlist" class="btn btn-mint">Join the borrower waitlist <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+                <a href="#rating-engine" class="btn btn-ghost">See what you'd pay</a>
+              </div>
+            </div>
+          </div>
+
+          <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/75">
+            <li class="flex items-center gap-2"><svg class="ico h-4 w-4 text-accent-light" aria-hidden="true"><use href="#i-check"/></svg>ID-verified on both sides</li>
+            <li class="flex items-center gap-2"><svg class="ico h-4 w-4 text-accent-light" aria-hidden="true"><use href="#i-check"/></svg>Rated AAA to CCC</li>
+            <li class="flex items-center gap-2"><svg class="ico h-4 w-4 text-accent-light" aria-hidden="true"><use href="#i-check"/></svg>Priced as APR / APY</li>
+          </ul>
+          <p class="mt-4 text-xs text-white/65">Free to join. All figures on this page are illustrative. Capital at risk.</p>
+        </div>
+
+        <!-- Marketplace visual: capital flowing New York -> Johannesburg -->
+        <figure class="relative mx-auto w-full max-w-[560px]">
+          <div id="globe-wrap" class="relative aspect-square w-full">
+            <canvas id="globe" class="absolute inset-0 h-full w-full" aria-hidden="true"></canvas>
+            <div id="chip-a" class="pointer-events-none absolute left-0 top-0">
+              <div class="whitespace-nowrap rounded-xl border border-white/15 bg-navy-950/80 px-3 py-2 backdrop-blur" style="transform: translate(-10px, calc(-100% - 14px));">
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-accent-light">Lender &middot; New York</p>
+                <p class="text-sm font-semibold text-white">Diego lends $500</p>
+              </div>
+            </div>
+            <div id="chip-b" class="pointer-events-none absolute left-0 top-0">
+              <div class="whitespace-nowrap rounded-xl border border-white/15 bg-navy-950/80 px-3 py-2 backdrop-blur" style="transform: translate(calc(-100% + 10px), 14px);">
+                <p class="text-[10px] font-semibold uppercase tracking-wider text-white/70">Borrower &middot; Johannesburg</p>
+                <p class="text-sm font-semibold text-white">Jim borrows $500 &middot; BBB</p>
+              </div>
+            </div>
+            <p class="absolute bottom-1 left-1/2 flex -translate-x-1/2 items-center gap-4 whitespace-nowrap text-[11px] text-white/70" aria-hidden="true">
+              <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-accent-light"></span>Funds out</span>
+              <span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full border border-white/80"></span>Repayments back</span>
+            </p>
+          </div>
+          <figcaption class="sr-only">Animated globe: a lender in New York funds a $500 loan to a borrower in Johannesburg, and monthly repayments flow back.</figcaption>
+
+          <div class="relative z-10 -mt-2 rounded-2xl bg-white p-4 text-navy-900 shadow-lift sm:mx-auto sm:max-w-sm">
+            <div class="flex items-center justify-between gap-3">
+              <p class="text-xs font-semibold uppercase tracking-wide text-slate-600">Loan listing &middot; illustrative</p>
+              <span class="rounded-md bg-navy-900 px-2 py-0.5 text-xs font-bold text-white">BBB</span>
+            </div>
+            <dl class="mt-3 grid grid-cols-3 gap-2 text-center">
+              <div class="rounded-lg bg-paper py-2"><dt class="text-[11px] text-slate-600">Amount</dt><dd class="text-base font-bold tabular-nums">$500</dd></div>
+              <div class="rounded-lg bg-paper py-2"><dt class="text-[11px] text-slate-600">Term</dt><dd class="text-base font-bold tabular-nums">12 mo</dd></div>
+              <div class="rounded-lg bg-accent-tint py-2"><dt class="text-[11px] text-accent-dark">Annualised</dt><dd class="text-base font-bold tabular-nums text-accent-dark">12.0% APR</dd></div>
+            </dl>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ THE IDEA IN ONE LOAN (Jim & Diego) ============ -->
+    <section id="example" class="section bg-white" aria-labelledby="example-h">
+      <div class="container-x">
+        <div class="max-w-2xl">
+          <p class="eyebrow">The idea in one loan</p>
+          <h2 id="example-h" class="h2 mt-3">Same $500. Very different value.</h2>
+          <p class="lead mt-4">Purchasing power varies by country. $500 is roughly a week of rent in New York. In Johannesburg, for many households, it's a month's pay. Credital moves capital from where it's abundant to where it's scarce, and pays both sides for it.</p>
+        </div>
+
+        <div class="mt-12 grid grid-cols-1 gap-4 lg:grid-cols-[1fr_auto_1fr] lg:items-stretch">
+          <article class="card p-6 shadow-soft">
+            <div class="flex items-center gap-3">
+              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-navy-900 text-lg font-bold text-white" aria-hidden="true">D</span>
+              <div><h3 class="text-lg font-bold text-navy-900">Diego &middot; New York</h3><p class="text-sm text-slate-600">Lender</p></div>
+            </div>
+            <p class="mt-4">Holds a stock and bond portfolio and wants a return that doesn't just track the market. He lends $500 to a BBB-rated borrower.</p>
+          </article>
+
+          <div class="flex flex-col items-center justify-center gap-2 px-2 py-2 text-center lg:min-w-[190px]">
+            <span class="rounded-full bg-navy-900 px-4 py-1.5 text-sm font-semibold text-white">BBB &middot; 12 months</span>
+            <svg class="ico h-7 w-7 rotate-90 text-accent lg:rotate-0" aria-hidden="true"><use href="#i-arrow"/></svg>
+            <p class="max-w-[16rem] text-sm text-slate-600">Credital verifies both people, rates Jim, sets the price and moves the money.</p>
+          </div>
+
+          <article class="card p-6 shadow-soft">
+            <div class="flex items-center gap-3">
+              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-accent text-lg font-bold text-white" aria-hidden="true">J</span>
+              <div><h3 class="text-lg font-bold text-navy-900">Jim &middot; Johannesburg</h3><p class="text-sm text-slate-600">Borrower</p></div>
+            </div>
+            <p class="mt-4">Needs $500 for a phone he uses for work. The banks won't look at his thin file, but his mobile-money, rent and utility history earn him a BBB rating.</p>
+          </article>
+        </div>
+
+        <div class="mt-4 grid gap-4 md:grid-cols-2">
+          <div class="rounded-2xl bg-navy-900 p-6 text-white on-dark">
+            <p class="text-sm font-semibold uppercase tracking-wider text-accent-light">Diego earns</p>
+            <p class="mt-2 text-4xl font-bold tabular-nums" id="ex-net">$25.45</p>
+            <p class="mt-1 text-white/75">expected net return on $500 over 12 months.</p>
+            <ul class="mt-4 space-y-1.5 text-sm text-white/80">
+              <li><span id="ex-gross">12.0%</span> gross annualised yield (APR)</li>
+              <li><span id="ex-netyield">9.3%</span> a year after Credital's fee and expected losses</li>
+            </ul>
+          </div>
+          <div class="rounded-2xl border border-line bg-paper p-6">
+            <p class="text-sm font-semibold uppercase tracking-wider text-accent">Jim pays</p>
+            <p class="mt-2 text-4xl font-bold tabular-nums text-navy-900"><span id="ex-pmt">$44.42</span><span class="text-lg font-semibold text-slate-600"> / month</span></p>
+            <p class="mt-1 text-slate-600">for 12 months. Total cost of credit <strong class="text-navy-900" id="ex-cost">$43.04</strong> (all-in APR <span id="ex-allin">15.8%</span>).</p>
+            <p class="mt-4 text-sm text-slate-600">The same loan from a 40% APR microlender would cost about <strong class="text-navy-900">$115</strong> in interest, and take longer to arrange.</p>
+          </div>
+        </div>
+        <p class="mt-4 max-w-3xl text-xs leading-relaxed text-slate-600">Illustrative example, not a quote or a forecast. Jim's loan is denominated in rand; dollar figures assume a constant R18 = $1. If the rand weakens, Diego's dollar return falls (see <a class="underline underline-offset-2" href="#trust">Trust &amp; risk</a>). Expected returns assume default rates shown in the rating table below and can turn out lower.</p>
+      </div>
+    </section>
+
+    <!-- ============ 2. HOW IT WORKS ============ -->
+    <section id="how" class="section bg-paper" aria-labelledby="how-h">
+      <div class="container-x">
+        <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div class="max-w-2xl">
+            <p class="eyebrow">How it works</p>
+            <h2 id="how-h" class="h2 mt-3">From ID check to repayment in four steps.</h2>
+            <p class="lead mt-4">Both sides follow the same path: verify, rate, match, repay. Pick yours.</p>
+          </div>
+          <div class="seg seg-light self-start md:self-auto" role="tablist" aria-label="Choose your side">
+            <button type="button" role="tab" id="tab-lend" aria-controls="panel-lend" aria-selected="true" data-aud-tab="lend" class="rounded-full px-5 py-2.5 text-sm font-semibold aria-selected:bg-navy-900 aria-selected:text-white text-slate-700">Lending</button>
+            <button type="button" role="tab" id="tab-borrow" aria-controls="panel-borrow" aria-selected="false" tabindex="-1" data-aud-tab="borrow" class="rounded-full px-5 py-2.5 text-sm font-semibold aria-selected:bg-navy-900 aria-selected:text-white text-slate-700">Borrowing</button>
+          </div>
+        </div>
+
+        <div id="panel-lend" role="tabpanel" aria-labelledby="tab-lend" data-show="lend" class="mt-10">
+          <ol class="steps grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <li class="card relative p-6">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-base font-bold text-white" aria-hidden="true">1</span>
+              <h3 class="mt-4 text-lg font-bold text-navy-900"><span class="sr-only">Step 1: </span>Verify</h3>
+              <p class="mt-2 text-slate-600">Open an account and confirm your ID. Every lender and every borrower passes KYC and AML screening, so you know who is on the other side.</p>
+            </li>
+            <li class="card relative p-6">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-base font-bold text-white" aria-hidden="true">2</span>
+              <h3 class="mt-4 text-lg font-bold text-navy-900"><span class="sr-only">Step 2: </span>Rate</h3>
+              <p class="mt-2 text-slate-600">No loan is listed before it has a credit rating from AAA to CCC. You see the rating, term, currency and annualised rate up front.</p>
+            </li>
+            <li class="card relative p-6">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-base font-bold text-white" aria-hidden="true">3</span>
+              <h3 class="mt-4 text-lg font-bold text-navy-900"><span class="sr-only">Step 3: </span>Match</h3>
+              <p class="mt-2 text-slate-600">Choose loans yourself, or set rules and let auto-invest do it. Your money is split into small slices across many borrowers, not one big bet.</p>
+            </li>
+            <li class="card relative p-6">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-base font-bold text-white" aria-hidden="true">4</span>
+              <h3 class="mt-4 text-lg font-bold text-navy-900"><span class="sr-only">Step 4: </span>Repay</h3>
+              <p class="mt-2 text-slate-600">Borrowers repay monthly. Interest and principal land in your wallet. Reinvest automatically, or withdraw what has been repaid.</p>
+            </li>
+          </ol>
+        </div>
+
+        <div id="panel-borrow" role="tabpanel" aria-labelledby="tab-borrow" data-show="borrow" class="mt-10">
+          <ol class="steps grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <li class="card relative p-6">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-base font-bold text-white" aria-hidden="true">1</span>
+              <h3 class="mt-4 text-lg font-bold text-navy-900"><span class="sr-only">Step 1: </span>Verify</h3>
+              <p class="mt-2 text-slate-600">Confirm your ID with a document and a selfie on your phone. It takes minutes, and it keeps the platform safe for everyone on it.</p>
+            </li>
+            <li class="card relative p-6">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-base font-bold text-white" aria-hidden="true">2</span>
+              <h3 class="mt-4 text-lg font-bold text-navy-900"><span class="sr-only">Step 2: </span>Rate</h3>
+              <p class="mt-2 text-slate-600">We use the credit bureau where one exists. Where it doesn't, we use mobile-money, bank, rent and utility history. You see your rating and exact APR before you commit.</p>
+            </li>
+            <li class="card relative p-6">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-base font-bold text-white" aria-hidden="true">3</span>
+              <h3 class="mt-4 text-lg font-bold text-navy-900"><span class="sr-only">Step 3: </span>Match</h3>
+              <p class="mt-2 text-slate-600">Your loan is listed and funded by many lenders at once. Our target is money in your account within 48 hours of approval.</p>
+            </li>
+            <li class="card relative p-6">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-base font-bold text-white" aria-hidden="true">4</span>
+              <h3 class="mt-4 text-lg font-bold text-navy-900"><span class="sr-only">Step 4: </span>Repay</h3>
+              <p class="mt-2 text-slate-600">Fixed monthly instalments by mobile money or bank transfer. Repay early with no penalty. On-time payments raise your rating and lower your next rate.</p>
+            </li>
+          </ol>
+        </div>
+        <p class="mt-6 text-xs text-slate-600">Timings and features are targets for launch and may change. Availability depends on local regulation.</p>
+      </div>
+    </section>
+
+    <!-- ============ 3. CREDIT RATING ENGINE + CALCULATOR ============ -->
+    <section id="rating-engine" class="section bg-white" aria-labelledby="engine-h">
+      <div class="container-x">
+        <div class="max-w-2xl">
+          <p class="eyebrow">The credit rating engine</p>
+          <h2 id="engine-h" class="h2 mt-3">One rating. One price. No black box.</h2>
+          <p class="lead mt-4">Every borrower gets a bond-style rating from AAA to CCC before any loan is listed. The rating measures how likely they are to repay. Two things then set the price: <strong class="text-navy-900">the rating and the loan length.</strong> More risk or more time means a higher yield.</p>
+        </div>
+
+        <div class="mt-12 grid grid-cols-1 items-start gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-12">
+          <div class="space-y-6">
+            <div class="card p-6">
+              <h3 class="text-lg font-bold text-navy-900">How a rating is built</h3>
+              <ul class="mt-4 space-y-3">
+                <li class="flex gap-3"><span class="icon-box !h-9 !w-9" aria-hidden="true"><svg class="ico"><use href="#i-id"/></svg></span><span><strong class="text-navy-900">Identity first.</strong> KYC and AML checks before anyone is rated.</span></li>
+                <li class="flex gap-3"><span class="icon-box !h-9 !w-9" aria-hidden="true"><svg class="ico"><use href="#i-data"/></svg></span><span><strong class="text-navy-900">Credit bureau where one exists.</strong> We don't ignore proven history.</span></li>
+                <li class="flex gap-3"><span class="icon-box !h-9 !w-9" aria-hidden="true"><svg class="ico"><use href="#i-layers"/></svg></span><span><strong class="text-navy-900">Alternative data where it doesn't.</strong> Mobile-money history, bank transactions, utility and rent payments, verified income.</span></li>
+              </ul>
+            </div>
+
+            <div class="card p-6">
+              <h3 class="text-lg font-bold text-navy-900">How the rate is set</h3>
+              <p class="mt-3 rounded-xl bg-paper px-4 py-3 text-center text-base font-semibold text-navy-900 sm:text-lg">Yield (APR) = <span class="text-accent">Base rate for the rating</span> &times; <span class="text-accent">Term factor</span></p>
+              <p class="mt-3 text-sm text-slate-600">The base rate is quoted at a 12-month term. The term factor adds 0.8% of the rate for every month beyond 12, and takes it off for every month under. Rates are always shown as annualised APR and APY, so you can compare them with a bond, a savings account or a fund.</p>
+              <div class="mt-4 overflow-x-auto">
+                <table class="w-full text-xs sm:text-sm">
+                  <caption class="sr-only">Term factor by loan length</caption>
+                  <thead><tr class="text-left text-slate-600"><th scope="col" class="pb-2 pr-2 font-medium">Term</th><th scope="col" class="pb-2 pr-2 font-medium tabular-nums">3 mo</th><th scope="col" class="pb-2 pr-2 font-medium tabular-nums">6 mo</th><th scope="col" class="pb-2 pr-2 font-medium tabular-nums">12 mo</th><th scope="col" class="pb-2 pr-2 font-medium tabular-nums">24 mo</th><th scope="col" class="pb-2 font-medium tabular-nums">36 mo</th></tr></thead>
+                  <tbody><tr class="font-semibold text-navy-900"><th scope="row" class="py-1 pr-2 text-left font-medium text-slate-600">Factor</th><td class="pr-2 tabular-nums">&times;0.93</td><td class="pr-2 tabular-nums">&times;0.95</td><td class="pr-2 tabular-nums">&times;1.00</td><td class="pr-2 tabular-nums">&times;1.10</td><td class="tabular-nums">&times;1.19</td></tr></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="card overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm" id="rating-table">
+                <caption class="px-5 pb-1 pt-5 text-left">
+                  <span class="block text-lg font-bold text-navy-900">The AAA to CCC scale</span>
+                  <span class="mt-1 block text-sm font-normal text-slate-600">Illustrative pricing at a 12-month term. Your calculator choice is highlighted.</span>
+                </caption>
+                <thead>
+                  <tr class="border-b border-line text-left text-xs uppercase tracking-wider text-slate-600">
+                    <th scope="col" class="px-3 py-3 font-semibold sm:px-5">Rating</th>
+                    <th scope="col" class="hidden px-2 py-3 font-semibold sm:table-cell">Risk</th>
+                    <th scope="col" class="w-[38%] px-2 py-3 font-semibold">Base APR</th>
+                    <th scope="col" class="px-3 py-3 text-right font-semibold sm:px-5">Defaults / yr*</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-line">
+                  <tr data-rating="0"><th scope="row" class="px-3 py-3 text-left font-bold text-navy-900 sm:px-5">AAA</th><td class="hidden px-2 py-3 sm:table-cell">Very low</td><td class="px-2 py-3"><div class="flex items-center gap-2"><span class="w-12 shrink-0 font-semibold tabular-nums text-navy-900">6.0%</span><span class="block flex-1" aria-hidden="true"><span class="block h-2 rounded-full bg-accent/70" style="width:20%"></span></span></div></td><td class="px-3 py-3 text-right tabular-nums sm:px-5">0.3%</td></tr>
+                  <tr data-rating="1"><th scope="row" class="px-3 py-3 text-left font-bold text-navy-900 sm:px-5">AA</th><td class="hidden px-2 py-3 sm:table-cell">Low</td><td class="px-2 py-3"><div class="flex items-center gap-2"><span class="w-12 shrink-0 font-semibold tabular-nums text-navy-900">7.5%</span><span class="block flex-1" aria-hidden="true"><span class="block h-2 rounded-full bg-accent/70" style="width:25%"></span></span></div></td><td class="px-3 py-3 text-right tabular-nums sm:px-5">0.6%</td></tr>
+                  <tr data-rating="2"><th scope="row" class="px-3 py-3 text-left font-bold text-navy-900 sm:px-5">A</th><td class="hidden px-2 py-3 sm:table-cell">Lower-moderate</td><td class="px-2 py-3"><div class="flex items-center gap-2"><span class="w-12 shrink-0 font-semibold tabular-nums text-navy-900">9.5%</span><span class="block flex-1" aria-hidden="true"><span class="block h-2 rounded-full bg-accent/70" style="width:31.7%"></span></span></div></td><td class="px-3 py-3 text-right tabular-nums sm:px-5">1.2%</td></tr>
+                  <tr data-rating="3"><th scope="row" class="px-3 py-3 text-left font-bold text-navy-900 sm:px-5">BBB</th><td class="hidden px-2 py-3 sm:table-cell">Moderate</td><td class="px-2 py-3"><div class="flex items-center gap-2"><span class="w-12 shrink-0 font-semibold tabular-nums text-navy-900">12.0%</span><span class="block flex-1" aria-hidden="true"><span class="block h-2 rounded-full bg-accent/70" style="width:40%"></span></span></div></td><td class="px-3 py-3 text-right tabular-nums sm:px-5">2.5%</td></tr>
+                  <tr data-rating="4"><th scope="row" class="px-3 py-3 text-left font-bold text-navy-900 sm:px-5">BB</th><td class="hidden px-2 py-3 sm:table-cell">Elevated</td><td class="px-2 py-3"><div class="flex items-center gap-2"><span class="w-12 shrink-0 font-semibold tabular-nums text-navy-900">16.0%</span><span class="block flex-1" aria-hidden="true"><span class="block h-2 rounded-full bg-accent/70" style="width:53.3%"></span></span></div></td><td class="px-3 py-3 text-right tabular-nums sm:px-5">5.5%</td></tr>
+                  <tr data-rating="5"><th scope="row" class="px-3 py-3 text-left font-bold text-navy-900 sm:px-5">B</th><td class="hidden px-2 py-3 sm:table-cell">High</td><td class="px-2 py-3"><div class="flex items-center gap-2"><span class="w-12 shrink-0 font-semibold tabular-nums text-navy-900">22.0%</span><span class="block flex-1" aria-hidden="true"><span class="block h-2 rounded-full bg-accent/70" style="width:73.3%"></span></span></div></td><td class="px-3 py-3 text-right tabular-nums sm:px-5">11%</td></tr>
+                  <tr data-rating="6"><th scope="row" class="px-3 py-3 text-left font-bold text-navy-900 sm:px-5">CCC</th><td class="hidden px-2 py-3 sm:table-cell">Very high</td><td class="px-2 py-3"><div class="flex items-center gap-2"><span class="w-12 shrink-0 font-semibold tabular-nums text-navy-900">30.0%</span><span class="block flex-1" aria-hidden="true"><span class="block h-2 rounded-full bg-accent/70" style="width:100%"></span></span></div></td><td class="px-3 py-3 text-right tabular-nums sm:px-5">20%</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="border-t border-line bg-paper px-5 py-3 text-xs leading-relaxed text-slate-600">Credital's internal scale. It uses familiar letters but is not issued by, or equivalent to, a credit rating agency. *Assumed annual default rates are modelling assumptions, not forecasts.</p>
+          </div>
+        </div>
+
+        <!-- Calculator -->
+        <div id="calc" class="card mt-10 shadow-soft" aria-labelledby="calc-title">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-line px-5 py-4 sm:px-7">
+            <h3 id="calc-title" class="text-xl font-bold text-navy-900"><span data-show="lend">Yield calculator</span><span data-show="borrow">Loan cost calculator</span></h3>
+            <fieldset>
+              <legend class="sr-only">Calculator mode</legend>
+              <div class="seg seg-light">
+                <div><input class="peer sr-only" type="radio" name="aud-calc" id="aud-calc-lend" value="lend" data-aud-radio checked><label class="seg-label" for="aud-calc-lend">I want to lend</label></div>
+                <div><input class="peer sr-only" type="radio" name="aud-calc" id="aud-calc-borrow" value="borrow" data-aud-radio><label class="seg-label" for="aud-calc-borrow">I want to borrow</label></div>
+              </div>
+            </fieldset>
+          </div>
+
+          <div class="grid grid-cols-1 gap-8 p-5 sm:p-7 lg:grid-cols-[1fr_1.05fr]">
+            <!-- Inputs -->
+            <div class="space-y-7">
+              <fieldset>
+                <legend class="text-sm font-semibold text-navy-900">Borrower's credit rating</legend>
+                <div class="mt-2 grid grid-cols-7 gap-1.5" id="rating-group">
+                  <div><input class="peer sr-only" type="radio" name="rating" id="r-0" value="0"><label class="pill-label" for="r-0">AAA</label></div>
+                  <div><input class="peer sr-only" type="radio" name="rating" id="r-1" value="1"><label class="pill-label" for="r-1">AA</label></div>
+                  <div><input class="peer sr-only" type="radio" name="rating" id="r-2" value="2"><label class="pill-label" for="r-2">A</label></div>
+                  <div><input class="peer sr-only" type="radio" name="rating" id="r-3" value="3" checked><label class="pill-label" for="r-3">BBB</label></div>
+                  <div><input class="peer sr-only" type="radio" name="rating" id="r-4" value="4"><label class="pill-label" for="r-4">BB</label></div>
+                  <div><input class="peer sr-only" type="radio" name="rating" id="r-5" value="5"><label class="pill-label" for="r-5">B</label></div>
+                  <div><input class="peer sr-only" type="radio" name="rating" id="r-6" value="6"><label class="pill-label" for="r-6">CCC</label></div>
+                </div>
+                <p class="mt-2 flex justify-between text-xs text-slate-600"><span>Lowest risk</span><span>Highest risk</span></p>
+              </fieldset>
+
+              <div>
+                <div class="flex items-end justify-between gap-4">
+                  <label for="amount-num" class="text-sm font-semibold text-navy-900"><span data-show="lend">Amount you lend</span><span data-show="borrow">Amount you borrow</span></label>
+                  <div class="relative w-36">
+                    <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600" aria-hidden="true">$</span>
+                    <input id="amount-num" type="number" inputmode="numeric" min="100" max="5000" step="1" value="500" class="field !py-2 !pl-7 text-right font-semibold tabular-nums">
+                  </div>
+                </div>
+                <input id="amount-rng" class="rng mt-2" type="range" min="100" max="5000" step="50" value="500" aria-label="Amount, from 100 to 5,000 dollars">
+                <p class="flex justify-between text-xs text-slate-600"><span>$100</span><span>$5,000</span></p>
+              </div>
+
+              <div>
+                <div class="flex items-end justify-between gap-4">
+                  <label for="term-rng" class="text-sm font-semibold text-navy-900">Loan duration</label>
+                  <output id="term-out" for="term-rng" class="text-base font-semibold tabular-nums text-navy-900">12 months</output>
+                </div>
+                <input id="term-rng" class="rng mt-2" type="range" min="3" max="36" step="1" value="12" aria-label="Loan duration in months, from 3 to 36">
+                <p class="flex justify-between text-xs text-slate-600"><span>3 months</span><span>36 months</span></p>
+              </div>
+
+              <div data-show="lend">
+                <label for="fx" class="text-sm font-semibold text-navy-900">Currency scenario <span class="font-normal text-slate-600">(cross-border loans)</span></label>
+                <select id="fx" class="field mt-2 !py-2.5">
+                  <option value="0">No currency move</option>
+                  <option value="5">Borrower's currency +5% vs mine</option>
+                  <option value="-5">Borrower's currency &minus;5% vs mine</option>
+                  <option value="-10">Borrower's currency &minus;10% vs mine</option>
+                  <option value="-20">Borrower's currency &minus;20% vs mine</option>
+                </select>
+                <p class="mt-1.5 text-xs text-slate-600">Simplified: the move is applied to every repayment. Real outcomes depend on timing.</p>
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="on-dark rounded-2xl bg-navy-900 p-5 text-white sm:p-6">
+              <!-- Lender results -->
+              <div data-show="lend">
+                <p class="text-sm text-white/75">Annualised yield (APR), paid by the borrower</p>
+                <p class="mt-1 flex flex-wrap items-baseline gap-x-3">
+                  <span id="l-apr" class="text-5xl font-bold tabular-nums">12.0%</span>
+                  <span class="text-sm text-white/75">APY <span id="l-apy" class="tabular-nums">12.7%</span></span>
+                </p>
+                <p id="l-why" class="mt-1 text-sm text-white/75">Set by rating BBB &times; 12-month term</p>
+
+                <div class="mt-5">
+                  <div id="l-bar" role="img" aria-label="" class="flex h-3 overflow-hidden rounded-full bg-white/10">
+                    <span id="l-bar-net" class="bg-accent-light"></span>
+                    <span id="l-bar-fee" class="bg-[#7C93B8]"></span>
+                    <span id="l-bar-loss" class="bg-[#F5B453]"></span>
+                  </div>
+                  <ul class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-white/80">
+                    <li class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-accent-light" aria-hidden="true"></span>Net yield <span id="l-netpts" class="tabular-nums"></span></li>
+                    <li class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-[#7C93B8]" aria-hidden="true"></span>Fee <span id="l-feepts" class="tabular-nums"></span></li>
+                    <li class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-[#F5B453]" aria-hidden="true"></span>Expected losses <span id="l-losspts" class="tabular-nums"></span></li>
+                  </ul>
+                </div>
+
+                <dl class="mt-5 divide-y divide-white/10 text-sm">
+                  <div class="flex justify-between gap-4 py-2.5"><dt class="text-white/80">Interest paid by borrower</dt><dd id="l-int" class="font-semibold tabular-nums">+$33.04</dd></div>
+                  <div class="flex justify-between gap-4 py-2.5"><dt class="text-white/80">Credital servicing fee (1.0% a year)</dt><dd id="l-fee" class="font-semibold tabular-nums">&minus;$2.76</dd></div>
+                  <div class="flex justify-between gap-4 py-2.5"><dt class="text-white/80">Expected credit losses (<span id="l-pd">2.5%</span> defaults, 70% loss)</dt><dd id="l-loss" class="font-semibold tabular-nums">&minus;$4.83</dd></div>
+                  <div class="flex justify-between gap-4 py-3"><dt class="font-semibold">Expected net return</dt><dd class="text-right"><span id="l-net" class="block text-xl font-bold tabular-nums text-accent-light">+$25.45</span><span id="l-netyield" class="block text-xs text-white/75">9.3% a year, net</span></dd></div>
+                  <div id="l-fxrow" class="flex justify-between gap-4 py-3" hidden><dt id="l-fxlabel" class="font-semibold text-[#F5B453]">After currency move</dt><dd id="l-fxval" class="text-right text-lg font-bold tabular-nums text-[#F5B453]"></dd></div>
+                </dl>
+                <p id="l-back" class="mt-2 text-sm text-white/80">You'd expect about $525.45 back on $500 lent.</p>
+                <p class="mt-3 rounded-lg bg-white/5 px-3 py-2 text-xs leading-relaxed text-white/75">If this borrower stopped paying, you could lose most of what is still owed to you. That is why Credital spreads your money across many loans.</p>
+              </div>
+
+              <!-- Borrower results -->
+              <div data-show="borrow">
+                <p class="text-sm text-white/75">Your interest rate, fixed for the whole loan</p>
+                <p class="mt-1 flex flex-wrap items-baseline gap-x-3">
+                  <span id="b-apr" class="text-5xl font-bold tabular-nums">12.0%</span>
+                  <span class="text-sm text-white/75">APR</span>
+                </p>
+                <p id="b-why" class="mt-1 text-sm text-white/75">Set by rating BBB &times; 12-month term</p>
+
+                <dl class="mt-5 divide-y divide-white/10 text-sm">
+                  <div class="flex justify-between gap-4 py-2.5"><dt class="text-white/80">Monthly repayment</dt><dd class="font-semibold tabular-nums"><span id="b-pmt">$44.42</span> &times; <span id="b-n">12</span></dd></div>
+                  <div class="flex justify-between gap-4 py-2.5"><dt class="text-white/80">Total interest</dt><dd id="b-int" class="font-semibold tabular-nums">$33.04</dd></div>
+                  <div class="flex justify-between gap-4 py-2.5"><dt class="text-white/80">Origination fee (2%, taken from payout)</dt><dd id="b-fee" class="font-semibold tabular-nums">$10.00</dd></div>
+                  <div class="flex justify-between gap-4 py-2.5"><dt class="text-white/80">You receive</dt><dd id="b-recv" class="font-semibold tabular-nums">$490.00</dd></div>
+                  <div class="flex justify-between gap-4 py-3"><dt class="font-semibold">Total cost of credit</dt><dd class="text-right"><span id="b-cost" class="block text-xl font-bold tabular-nums text-accent-light">$43.04</span><span class="block text-xs text-white/75">interest + fee</span></dd></div>
+                  <div class="flex justify-between gap-4 py-2.5"><dt class="text-white/80">Total you repay</dt><dd id="b-total" class="font-semibold tabular-nums">$533.04</dd></div>
+                  <div class="flex justify-between gap-4 py-2.5"><dt class="text-white/80">All-in APR including the fee</dt><dd id="b-allin" class="font-semibold tabular-nums">15.8%</dd></div>
+                </dl>
+                <p class="mt-3 rounded-lg bg-white/5 px-3 py-2 text-xs leading-relaxed text-white/75">Borrow only what you can repay. Missed payments can bring late fees, collections and a lower rating.</p>
+              </div>
+            </div>
+          </div>
+
+          <p class="border-t border-line bg-paper px-5 py-3 text-xs leading-relaxed text-slate-600 sm:px-7">Illustrative model. Not a quote, an offer or a forecast. Loans amortise in equal monthly instalments; figures are in the loan's currency. Fees are examples, and final pricing will be set at launch. Returns are not guaranteed and you can lose money.</p>
+          <p id="calc-live" class="sr-only" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 4. WHY LEND ============ -->
+    <section id="lend" class="section bg-paper" aria-labelledby="lend-h">
+      <div class="container-x">
+        <div class="max-w-2xl">
+          <p class="eyebrow">For lenders</p>
+          <h2 id="lend-h" class="h2 mt-3">Consumer credit: the asset class banks kept for themselves.</h2>
+          <p class="lead mt-4">Banks earn a spread by lending to households. Credital gives you access to that same yield, one small, rated loan at a time, alongside the ETFs and stocks you already hold.</p>
+        </div>
+
+        <div class="mt-12 grid gap-4 lg:grid-cols-3">
+          <article class="card p-6">
+            <span class="icon-box" aria-hidden="true"><svg class="ico"><use href="#i-trend"/></svg></span>
+            <h3 class="mt-4 text-xl font-bold text-navy-900">A different engine of return</h3>
+            <p class="mt-2 text-slate-600">Stocks pay you through price moves. Bonds pay coupons. Consumer loans pay monthly instalments driven by households repaying, not by market sentiment.</p>
+            <ul class="mt-4 space-y-2.5 text-sm">
+              <li class="flex gap-2.5"><svg class="ico mt-0.5 h-4 w-4 text-accent" aria-hidden="true"><use href="#i-check"/></svg>Monthly cash flow of interest and principal</li>
+              <li class="flex gap-2.5"><svg class="ico mt-0.5 h-4 w-4 text-accent" aria-hidden="true"><use href="#i-check"/></svg>APR and APY on every loan, comparable with bonds and savings</li>
+              <li class="flex gap-2.5"><svg class="ico mt-0.5 h-4 w-4 text-accent" aria-hidden="true"><use href="#i-check"/></svg>Exposure to households and economies an index fund can't reach</li>
+            </ul>
+            <p class="mt-4 text-xs leading-relaxed text-slate-600">Not risk-free: consumer credit can suffer in recessions. It just doesn't move in lockstep with your equities.</p>
+          </article>
+
+          <article class="card p-6">
+            <span class="icon-box" aria-hidden="true"><svg class="ico"><use href="#i-layers"/></svg></span>
+            <h3 class="mt-4 text-xl font-bold text-navy-900">Spread thin. Lose small.</h3>
+            <p class="mt-2 text-slate-600">One big loan is a bet. Fifty small ones are a portfolio. Slide to split $1,000 across more loans.</p>
+            <div class="mt-4">
+              <div class="flex items-center justify-between gap-3 text-sm">
+                <label for="div-rng" class="font-semibold text-navy-900">Number of loans</label>
+                <output id="div-n" for="div-rng" class="font-semibold tabular-nums text-navy-900">20 loans of $50</output>
+              </div>
+              <input id="div-rng" class="rng" type="range" min="1" max="50" step="1" value="20">
+              <div id="div-grid" class="mt-2 grid grid-cols-10 gap-1" aria-hidden="true"></div>
+              <p id="div-out" class="mt-3 rounded-lg bg-paper px-3 py-2 text-sm" aria-live="polite">One default costs you at most <strong class="text-navy-900">5%</strong> of $1,000.</p>
+              <p class="mt-2 flex items-center gap-4 text-xs text-slate-600"><span class="flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-sm bg-amber-400" aria-hidden="true"></span>Defaulted loan</span><span class="flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-sm bg-accent/60" aria-hidden="true"></span>Performing loans</span></p>
+            </div>
+          </article>
+
+          <article class="card p-6">
+            <span class="icon-box" aria-hidden="true"><svg class="ico"><use href="#i-repeat"/></svg></span>
+            <h3 class="mt-4 text-xl font-bold text-navy-900">Auto-invest, on your rules</h3>
+            <p class="mt-2 text-slate-600">Set your limits once. Credital builds the portfolio, and reinvests each repayment the same way.</p>
+            <div class="mt-4 rounded-xl border border-line bg-paper p-4">
+              <p class="text-xs font-semibold uppercase tracking-wider text-slate-600">Example rules &middot; illustrative interface</p>
+              <dl class="mt-3 divide-y divide-line text-sm">
+                <div class="flex justify-between gap-3 py-2"><dt class="text-slate-600">Ratings</dt><dd class="font-semibold text-navy-900">A to BB</dd></div>
+                <div class="flex justify-between gap-3 py-2"><dt class="text-slate-600">Terms</dt><dd class="font-semibold text-navy-900">6 to 24 months</dd></div>
+                <div class="flex justify-between gap-3 py-2"><dt class="text-slate-600">Max per loan</dt><dd class="font-semibold text-navy-900">2% of portfolio</dd></div>
+                <div class="flex justify-between gap-3 py-2"><dt class="text-slate-600">Max per country</dt><dd class="font-semibold text-navy-900">15%</dd></div>
+                <div class="flex justify-between gap-3 py-2"><dt class="text-slate-600">Max per currency</dt><dd class="font-semibold text-navy-900">25%</dd></div>
+                <div class="flex justify-between gap-3 py-2"><dt class="text-slate-600">Reinvest repayments</dt><dd class="font-semibold text-accent">On</dd></div>
+              </dl>
+            </div>
+          </article>
+        </div>
+
+        <div class="mt-6 flex flex-col gap-4 rounded-2xl bg-accent-tint p-6 sm:flex-row sm:items-center sm:justify-between">
+          <p class="max-w-2xl text-accent-dark"><strong>Be honest with yourself about risk.</strong> Diversification reduces the damage from any single borrower. It does not remove the risk of loss, and returns are never guaranteed.</p>
+          <a href="#waitlist" class="btn btn-primary shrink-0">Join the lender waitlist</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5. WHY BORROW ============ -->
+    <section id="borrow" class="section bg-white" aria-labelledby="borrow-h">
+      <div class="container-x">
+        <div class="max-w-2xl">
+          <p class="eyebrow">For borrowers</p>
+          <h2 id="borrow-h" class="h2 mt-3">A loan in days, not weeks. A price you can see.</h2>
+          <p class="lead mt-4">Small loans shouldn't need a branch visit, a payslip stack or a friend who owes you a favour. And they shouldn't cost 300% APR.</p>
+        </div>
+
+        <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <article class="card p-6">
+            <span class="icon-box" aria-hidden="true"><svg class="ico"><use href="#i-bolt"/></svg></span>
+            <h3 class="mt-4 text-lg font-bold text-navy-900">Fast</h3>
+            <p class="mt-2 text-slate-600">Apply on your phone in minutes. Our target: money in your account within 48 hours of approval.</p>
+          </article>
+          <article class="card p-6">
+            <span class="icon-box" aria-hidden="true"><svg class="ico"><use href="#i-scale"/></svg></span>
+            <h3 class="mt-4 text-lg font-bold text-navy-900">Fair</h3>
+            <p class="mt-2 text-slate-600">No credit file? No problem. We rate you on how you really pay: mobile money, rent, utilities, income.</p>
+          </article>
+          <article class="card p-6">
+            <span class="icon-box" aria-hidden="true"><svg class="ico"><use href="#i-eye"/></svg></span>
+            <h3 class="mt-4 text-lg font-bold text-navy-900">Transparent</h3>
+            <p class="mt-2 text-slate-600">One fixed rate, set by your rating and loan length. Every fee shown before you accept. No rollovers.</p>
+          </article>
+          <article class="card p-6">
+            <span class="icon-box" aria-hidden="true"><svg class="ico"><use href="#i-trend"/></svg></span>
+            <h3 class="mt-4 text-lg font-bold text-navy-900">Gets cheaper</h3>
+            <p class="mt-2 text-slate-600">Repay on time and your rating improves. A better rating means a lower rate on your next loan.</p>
+          </article>
+        </div>
+
+        <div class="mt-10 card overflow-hidden shadow-soft">
+          <div class="px-5 pb-2 pt-5 sm:px-7">
+            <h3 class="text-xl font-bold text-navy-900">What $500 really costs over 6 months</h3>
+            <p class="mt-1 text-sm text-slate-600">Repaid in six equal monthly instalments, at each option's typical APR. Illustrative; rates vary by country and provider.</p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <caption class="sr-only">Cost comparison of Credital, microlenders, payday lenders and informal moneylenders</caption>
+              <thead>
+                <tr class="border-b border-line text-xs uppercase tracking-wider text-slate-600">
+                  <th scope="col" class="px-3 py-3 font-semibold sm:px-7">Option</th>
+                  <th scope="col" class="px-2 py-3 font-semibold sm:px-3">Typical APR</th>
+                  <th scope="col" class="px-2 py-3 font-semibold sm:px-3">Cost of $500</th>
+                  <th scope="col" class="hidden px-5 py-3 font-semibold sm:table-cell sm:px-7">Time to cash</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-line">
+                <tr class="bg-accent-tint">
+                  <th scope="row" class="px-3 py-4 font-bold text-navy-900 sm:px-7">Credital <span class="tag ml-1">BBB example</span><span class="mt-0.5 block text-xs font-normal text-slate-600">Fixed rate, every fee upfront<span class="sm:hidden"> &middot; cash in ~48h (target)</span></span></th>
+                  <td class="px-2 py-4 font-semibold tabular-nums text-navy-900 sm:px-3">11.4% <span class="font-normal text-slate-600">(18.5% incl. fee)</span></td>
+                  <td class="px-2 py-4 text-lg font-bold tabular-nums text-accent-dark sm:px-3">$27</td>
+                  <td class="hidden px-5 py-4 sm:table-cell sm:px-7">Target: 48 hours</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="px-3 py-4 font-semibold text-navy-900 sm:px-7">Microlender<span class="mt-0.5 block text-xs font-normal text-slate-600">Fees vary, often bundled<span class="sm:hidden"> &middot; 1&ndash;3 days</span></span></th>
+                  <td class="px-2 py-4 tabular-nums sm:px-3">40&ndash;100%</td>
+                  <td class="px-2 py-4 font-semibold tabular-nums text-navy-900 sm:px-3">from $60</td>
+                  <td class="hidden px-5 py-4 sm:table-cell sm:px-7">1&ndash;3 days</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="px-3 py-4 font-semibold text-navy-900 sm:px-7">Payday lender<span class="mt-0.5 block text-xs font-normal text-slate-600">Rollovers and fees compound<span class="sm:hidden"> &middot; same day</span></span></th>
+                  <td class="px-2 py-4 tabular-nums sm:px-3">300&ndash;400%+</td>
+                  <td class="px-2 py-4 font-semibold tabular-nums text-navy-900 sm:px-3">from $516</td>
+                  <td class="hidden px-5 py-4 sm:table-cell sm:px-7">Same day</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="px-3 py-4 font-semibold text-navy-900 sm:px-7">Informal moneylender<span class="mt-0.5 block text-xs font-normal text-slate-600">Often 20&ndash;50% a month, unwritten terms<span class="sm:hidden"> &middot; same day</span></span></th>
+                  <td class="px-2 py-4 tabular-nums sm:px-3">240%+</td>
+                  <td class="px-2 py-4 font-semibold tabular-nums text-navy-900 sm:px-3">from $402</td>
+                  <td class="hidden px-5 py-4 sm:table-cell sm:px-7">Same day</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="border-t border-line bg-paper px-5 py-3 text-xs leading-relaxed text-slate-600 sm:px-7">A bank loan can cost less, if you can get one. Many people can't. Payday loans are normally due in one lump sum; the table shows what the same APR costs when spread over six months.</p>
+        </div>
+
+        <div class="mt-6 flex flex-col gap-4 rounded-2xl bg-navy-900 p-6 text-white on-dark sm:flex-row sm:items-center sm:justify-between">
+          <p class="max-w-2xl text-white/85"><strong class="text-white">Borrow responsibly.</strong> Only take what you can repay. If you miss payments, late fees and collections can follow, and your rating can fall.</p>
+          <a href="#waitlist" class="btn btn-mint shrink-0">Join the borrower waitlist</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 6. TRUST AND RISK ============ -->
+    <section id="trust" class="on-dark section bg-navy-900" aria-labelledby="trust-h">
+      <div class="container-x">
+        <div class="max-w-2xl">
+          <p class="eyebrow">Trust &amp; risk</p>
+          <h2 id="trust-h" class="h2 mt-3">Built for trust. Honest about risk.</h2>
+          <p class="lead mt-4">A marketplace is only as good as the people on it and the way it handles things going wrong. Here's how Credital is designed to work.</p>
+        </div>
+
+        <div class="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <article class="rounded-2xl border border-white/10 bg-white/[0.05] p-6">
+            <span class="icon-box" aria-hidden="true"><svg class="ico"><use href="#i-shield"/></svg></span>
+            <h3 class="mt-4 text-lg font-bold text-white">KYC and AML on both sides</h3>
+            <p class="mt-2 text-white/75">ID and document checks for every lender and borrower, sanctions and politically-exposed-person screening, and ongoing transaction monitoring.</p>
+          </article>
+          <article class="rounded-2xl border border-white/10 bg-white/[0.05] p-6">
+            <span class="icon-box" aria-hidden="true"><svg class="ico"><use href="#i-data"/></svg></span>
+            <h3 class="mt-4 text-lg font-bold text-white">Scoring that works without a bureau</h3>
+            <p class="mt-2 text-white/75">Alternative data is used only with the borrower's consent, models are tested for bias, and ratings update as repayment history builds.</p>
+          </article>
+          <article class="rounded-2xl border border-white/10 bg-white/[0.05] p-6">
+            <span class="icon-box" aria-hidden="true"><svg class="ico"><use href="#i-recover"/></svg></span>
+            <h3 class="mt-4 text-lg font-bold text-white">When a borrower misses a payment</h3>
+            <p class="mt-2 text-white/75">Reminders first, then a restructuring offer, then collections through local partners. Money recovered is passed to lenders after collection costs. Recoveries are often partial.</p>
+          </article>
+          <article class="rounded-2xl border border-white/10 bg-white/[0.05] p-6">
+            <span class="icon-box" aria-hidden="true"><svg class="ico"><use href="#i-vault"/></svg></span>
+            <h3 class="mt-4 text-lg font-bold text-white">Provision fund (planned)</h3>
+            <p class="mt-2 text-white/75">A share of fees is set aside to absorb part of credit losses. It is not a guarantee: it can be used up, and it will not cover every loss.</p>
+          </article>
+          <article class="rounded-2xl border border-white/10 bg-white/[0.05] p-6">
+            <span class="icon-box" aria-hidden="true"><svg class="ico"><use href="#i-globe"/></svg></span>
+            <h3 class="mt-4 text-lg font-bold text-white">Currency risk, made visible</h3>
+            <p class="mt-2 text-white/75">Borrowers repay in the currency they earn. Lenders see the currency of every loan, can cap exposure per currency, and can choose hedged loans where a fair hedge exists. Currency moves can cut or lift your return.</p>
+          </article>
+          <article class="rounded-2xl border border-white/10 bg-white/[0.05] p-6">
+            <span class="icon-box" aria-hidden="true"><svg class="ico"><use href="#i-lock"/></svg></span>
+            <h3 class="mt-4 text-lg font-bold text-white">Client money kept apart</h3>
+            <p class="mt-2 text-white/75">Lender and borrower funds are planned to sit in segregated accounts with regulated partner banks, separate from Credital's own money.</p>
+          </article>
+        </div>
+
+        <div class="mt-6 rounded-2xl border-l-4 border-[#F5B453] bg-white p-6 text-slate-700 sm:p-8">
+          <div class="flex items-start gap-3">
+            <svg class="ico mt-1 h-6 w-6 text-[#B45309]" aria-hidden="true"><use href="#i-warn"/></svg>
+            <div>
+              <h3 class="text-xl font-bold text-navy-900">Lending carries risk of loss.</h3>
+              <p class="mt-2">You can lose some or all of the money you lend. Only lend what you can afford to lose.</p>
+              <ul class="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2">
+                <li class="flex gap-2"><span aria-hidden="true">&bull;</span><span><strong class="text-navy-900">Default risk.</strong> Borrowers may not repay, and recoveries may be low.</span></li>
+                <li class="flex gap-2"><span aria-hidden="true">&bull;</span><span><strong class="text-navy-900">Currency risk.</strong> A weaker borrower currency can wipe out your yield.</span></li>
+                <li class="flex gap-2"><span aria-hidden="true">&bull;</span><span><strong class="text-navy-900">Liquidity risk.</strong> Your principal comes back as loans are repaid. Early exit isn't guaranteed.</span></li>
+                <li class="flex gap-2"><span aria-hidden="true">&bull;</span><span><strong class="text-navy-900">Platform and regulatory risk.</strong> Rules differ by country and can change.</span></li>
+                <li class="flex gap-2 sm:col-span-2"><span aria-hidden="true">&bull;</span><span><strong class="text-navy-900">No safety net.</strong> Not a bank deposit, and not covered by any deposit guarantee scheme.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 7. SOCIAL PROOF (PLACEHOLDERS) ============ -->
+    <section id="proof" class="section bg-white" aria-labelledby="proof-h">
+      <div class="container-x">
+        <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div class="max-w-2xl">
+            <p class="eyebrow">Social proof</p>
+            <h2 id="proof-h" class="h2 mt-3">What people say about Credital.</h2>
+          </div>
+          <p class="placeholder-tag self-start md:self-auto">Placeholder content &middot; replace before launch</p>
+        </div>
+
+        <dl class="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div class="rounded-2xl border border-dashed border-slate-500 p-5"><dt class="order-2 mt-1 text-sm text-slate-600">members on the waitlist</dt><dd class="text-3xl font-bold tabular-nums text-navy-900">[00,000]</dd></div>
+          <div class="rounded-2xl border border-dashed border-slate-500 p-5"><dt class="order-2 mt-1 text-sm text-slate-600">funded to date</dt><dd class="text-3xl font-bold tabular-nums text-navy-900">[$0.0M]</dd></div>
+          <div class="rounded-2xl border border-dashed border-slate-500 p-5"><dt class="order-2 mt-1 text-sm text-slate-600">countries covered</dt><dd class="text-3xl font-bold tabular-nums text-navy-900">[00]</dd></div>
+          <div class="rounded-2xl border border-dashed border-slate-500 p-5"><dt class="order-2 mt-1 text-sm text-slate-600">average customer rating</dt><dd class="text-3xl font-bold tabular-nums text-navy-900">[0.0 / 5]</dd></div>
+        </dl>
+
+        <div class="mt-4 grid gap-4 md:grid-cols-3">
+          <figure class="flex flex-col rounded-2xl border border-dashed border-slate-500 bg-paper p-6">
+            <span class="placeholder-tag self-start">Placeholder</span>
+            <blockquote class="mt-4 flex-1 text-lg leading-relaxed text-navy-900">&ldquo;[Lender quote: what surprised you about seeing the rating and APR on every loan?]&rdquo;</blockquote>
+            <figcaption class="mt-4 text-sm text-slate-600">[Lender name], [City]</figcaption>
+          </figure>
+          <figure class="flex flex-col rounded-2xl border border-dashed border-slate-500 bg-paper p-6">
+            <span class="placeholder-tag self-start">Placeholder</span>
+            <blockquote class="mt-4 flex-1 text-lg leading-relaxed text-navy-900">&ldquo;[Borrower quote: how fast did the money arrive, and what did it let you do?]&rdquo;</blockquote>
+            <figcaption class="mt-4 text-sm text-slate-600">[Borrower name], [City]</figcaption>
+          </figure>
+          <figure class="flex flex-col rounded-2xl border border-dashed border-slate-500 bg-paper p-6">
+            <span class="placeholder-tag self-start">Placeholder</span>
+            <blockquote class="mt-4 flex-1 text-lg leading-relaxed text-navy-900">&ldquo;[Lender quote: how did auto-invest change the way you think about diversification?]&rdquo;</blockquote>
+            <figcaption class="mt-4 text-sm text-slate-600">[Lender name], [City]</figcaption>
+          </figure>
+        </div>
+
+        <div class="mt-10">
+          <p class="text-center text-sm font-semibold uppercase tracking-wider text-slate-600">As seen in <span class="font-normal normal-case">(placeholder logos)</span></p>
+          <ul class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            <li class="flex h-16 items-center justify-center rounded-xl border border-dashed border-slate-500 text-sm font-semibold text-slate-600">[Press logo 1]</li>
+            <li class="flex h-16 items-center justify-center rounded-xl border border-dashed border-slate-500 text-sm font-semibold text-slate-600">[Press logo 2]</li>
+            <li class="flex h-16 items-center justify-center rounded-xl border border-dashed border-slate-500 text-sm font-semibold text-slate-600">[Press logo 3]</li>
+            <li class="flex h-16 items-center justify-center rounded-xl border border-dashed border-slate-500 text-sm font-semibold text-slate-600">[Press logo 4]</li>
+            <li class="col-span-2 flex h-16 items-center justify-center rounded-xl border border-dashed border-slate-500 text-sm font-semibold text-slate-600 sm:col-span-1">[Press logo 5]</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 8. FAQ ============ -->
+    <section id="faq" class="section bg-paper" aria-labelledby="faq-h">
+      <div class="container-x grid grid-cols-1 gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+        <div>
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faq-h" class="h2 mt-3">Straight answers.</h2>
+          <p class="lead mt-4">Fees and limits below are illustrative and will be confirmed at launch.</p>
+        </div>
+
+        <div class="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-white">
+          <details>
+            <summary class="flex cursor-pointer items-center justify-between gap-4 px-5 py-5 text-left text-base font-semibold text-navy-900 sm:px-6">What happens if a borrower defaults, and can I lose money?<svg class="ico faq-plus text-accent" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+            <div class="space-y-3 px-5 pb-5 text-slate-600 sm:px-6">
+              <p>Yes, you can lose money. Some borrowers will not repay. After a missed payment we send reminders, offer to restructure, and then pursue collection through local partners. Recovered money goes to lenders after collection costs, and recoveries are often only partial.</p>
+              <p>A provision fund, financed from a share of fees, is planned to absorb part of the losses. It isn't a guarantee. Your main protection is spreading money across many loans, and only lending what you can afford to lose.</p>
+            </div>
+          </details>
+          <details>
+            <summary class="flex cursor-pointer items-center justify-between gap-4 px-5 py-5 text-left text-base font-semibold text-navy-900 sm:px-6">How does cross-border lending work with currencies?<svg class="ico faq-plus text-accent" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+            <div class="space-y-3 px-5 pb-5 text-slate-600 sm:px-6">
+              <p>Borrowers borrow and repay in the currency they earn, so they aren't exposed to swings against a currency they don't use. That means lenders carry the exchange-rate risk on cross-border loans.</p>
+              <p>We show the currency of every loan, let you set per-currency limits in auto-invest, and offer hedged loans where a fair hedge is available. If the borrower's currency falls 10% against yours, that can wipe out a year's yield or more. Try it in the calculator above.</p>
+            </div>
+          </details>
+          <details>
+            <summary class="flex cursor-pointer items-center justify-between gap-4 px-5 py-5 text-left text-base font-semibold text-navy-900 sm:px-6">What does Credital cost?<svg class="ico faq-plus text-accent" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+            <div class="space-y-3 px-5 pb-5 text-slate-600 sm:px-6">
+              <p>Joining is free. In our current model, lenders pay a servicing fee of 1.0% a year on money out on loan, and borrowers pay a one-off origination fee of 2%, taken from the payout. Any currency conversion is charged at a disclosed margin.</p>
+              <p>Every fee is shown before you commit. There are no hidden charges. These figures are illustrative and final pricing will be published at launch.</p>
+            </div>
+          </details>
+          <details>
+            <summary class="flex cursor-pointer items-center justify-between gap-4 px-5 py-5 text-left text-base font-semibold text-navy-900 sm:px-6">What's the minimum I can invest?<svg class="ico faq-plus text-accent" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+            <div class="px-5 pb-5 text-slate-600 sm:px-6">
+              <p>We're planning a $100 minimum to start and $20 minimum per loan, so even a small balance can be spread across many borrowers. Limits may differ by country.</p>
+            </div>
+          </details>
+          <details>
+            <summary class="flex cursor-pointer items-center justify-between gap-4 px-5 py-5 text-left text-base font-semibold text-navy-900 sm:px-6">How do you score people who have no credit bureau file?<svg class="ico faq-plus text-accent" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+            <div class="space-y-3 px-5 pb-5 text-slate-600 sm:px-6">
+              <p>With their consent, we look at how they actually manage money: mobile-money history, bank transactions, utility and rent payments, and verified income. Where a bureau exists, we use it too.</p>
+              <p>Those signals feed a statistical model that produces a rating from AAA to CCC. It is monitored for bias, reviewed by people, and updated as real repayments come in.</p>
+            </div>
+          </details>
+          <details>
+            <summary class="flex cursor-pointer items-center justify-between gap-4 px-5 py-5 text-left text-base font-semibold text-navy-900 sm:px-6">How is the interest rate decided?<svg class="ico faq-plus text-accent" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+            <div class="px-5 pb-5 text-slate-600 sm:px-6">
+              <p>By two inputs only: the borrower's rating and the loan duration. Higher risk and longer duration mean a higher rate. It's fixed for the life of the loan and shown as an annualised APR (and APY for lenders), so you can compare it with other assets or other loans.</p>
+            </div>
+          </details>
+          <details>
+            <summary class="flex cursor-pointer items-center justify-between gap-4 px-5 py-5 text-left text-base font-semibold text-navy-900 sm:px-6">Can I take my money out whenever I want?<svg class="ico faq-plus text-accent" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+            <div class="px-5 pb-5 text-slate-600 sm:px-6">
+              <p>Repayments arrive in your wallet each month and you can withdraw them. But money still lent out is tied up until borrowers repay, and early exit is not guaranteed. A secondary market is something we're exploring, not a promise.</p>
+            </div>
+          </details>
+          <details>
+            <summary class="flex cursor-pointer items-center justify-between gap-4 px-5 py-5 text-left text-base font-semibold text-navy-900 sm:px-6">Borrowers: what do I need, and how fast is it?<svg class="ico faq-plus text-accent" aria-hidden="true"><use href="#i-plus"/></svg></summary>
+            <div class="px-5 pb-5 text-slate-600 sm:px-6">
+              <p>A phone, a government ID and a way to show how you handle money, such as mobile-money or bank history, or proof of income and rent. Verification takes minutes. Our target is to have the loan funded within 48 hours of approval. You see your rating, rate and every fee before you accept.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 9. FINAL CTA + WAITLIST ============ -->
+    <section id="waitlist" class="on-dark section relative overflow-hidden bg-navy-900" aria-labelledby="waitlist-h">
+      <div class="pointer-events-none absolute inset-0" aria-hidden="true" style="background: radial-gradient(50% 70% at 85% 30%, rgba(52,211,160,.16), transparent 70%);"></div>
+      <div class="container-x relative grid grid-cols-1 items-center gap-10 lg:grid-cols-[1fr_0.95fr] lg:gap-16">
+        <div>
+          <p class="eyebrow">Early access</p>
+          <h2 id="waitlist-h" class="h2 mt-3 sm:!text-5xl">Be first when Credital opens in your country.</h2>
+          <p class="lead mt-4 max-w-xl">Join the waitlist for early access, launch updates and priority onboarding. No fees to join, and no obligation to lend or borrow.</p>
+          <ul class="mt-6 space-y-2.5 text-white/85">
+            <li class="flex gap-2.5"><svg class="ico mt-0.5 text-accent-light" aria-hidden="true"><use href="#i-check"/></svg>Priority access when your market opens</li>
+            <li class="flex gap-2.5"><svg class="ico mt-0.5 text-accent-light" aria-hidden="true"><use href="#i-check"/></svg>Launch pricing and full fee details, before you commit</li>
+            <li class="flex gap-2.5"><svg class="ico mt-0.5 text-accent-light" aria-hidden="true"><use href="#i-check"/></svg>One email per milestone. No spam.</li>
+          </ul>
+        </div>
+
+        <div class="rounded-2xl bg-white p-6 text-slate-700 shadow-lift sm:p-8" style="--focus:#0B7A56">
+          <div id="wl-formwrap">
+            <h3 class="text-xl font-bold text-navy-900">Join the waitlist</h3>
+            <form id="wl-form" class="mt-5 space-y-5" novalidate>
+              <fieldset>
+                <legend class="text-sm font-semibold text-navy-900">I want to</legend>
+                <div class="seg seg-light mt-2">
+                  <div><input class="peer sr-only" type="radio" name="role" id="role-lend" value="lend" data-aud-radio checked><label class="seg-label" for="role-lend">Lend</label></div>
+                  <div><input class="peer sr-only" type="radio" name="role" id="role-borrow" value="borrow" data-aud-radio><label class="seg-label" for="role-borrow">Borrow</label></div>
+                </div>
+              </fieldset>
+              <div>
+                <label for="wl-email" class="text-sm font-semibold text-navy-900">Email address</label>
+                <input id="wl-email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder="you@example.com" class="field mt-2" aria-describedby="wl-err">
+                <p id="wl-err" class="mt-1.5 min-h-[1.25rem] text-sm font-medium text-red-700" role="alert"></p>
+              </div>
+              <div>
+                <label for="wl-country" class="text-sm font-semibold text-navy-900">Country <span class="font-normal text-slate-600">(optional)</span></label>
+                <input id="wl-country" name="country" type="text" autocomplete="country-name" placeholder="e.g. South Africa" class="field mt-2">
+              </div>
+              <div class="absolute -left-[9999px]" aria-hidden="true"><label>Leave this empty <input type="text" name="website" id="wl-hp" tabindex="-1" autocomplete="off"></label></div>
+              <button type="submit" id="wl-btn" class="btn btn-primary w-full">Join the waitlist</button>
+              <p class="text-xs leading-relaxed text-slate-600">We'll only email you about Credital's launch, and you can unsubscribe at any time. Joining the waitlist is not an application for credit or an investment.</p>
+            </form>
+          </div>
+          <div id="wl-success" tabindex="-1" role="status" class="hidden text-center">
+            <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent-tint text-accent"><svg class="ico h-7 w-7" aria-hidden="true"><use href="#i-check"/></svg></span>
+            <h3 class="mt-4 text-xl font-bold text-navy-900">You're on the list.</h3>
+            <p class="mt-2 text-slate-600" id="wl-success-msg">We'll email you when Credital opens in your market.</p>
+            <p id="wl-demo" class="mt-4 hidden rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-900">Demo mode: no waitlist endpoint is configured, so nothing was sent. Set <code>WAITLIST_ENDPOINT</code> in the page script.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ 10. FOOTER ============ -->
+  <footer class="on-dark bg-navy-950 text-white/75">
+    <div class="container-x py-12">
+      <div class="grid gap-10 md:grid-cols-[1.3fr_1fr_1fr_1fr]">
+        <div>
+          <a href="#top" class="flex items-center gap-2.5 text-white" aria-label="Credital, back to top">
+            <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#34D3A0"/><path d="M21.5 11.2A7.2 7.2 0 1 0 21.5 20.8" fill="none" stroke="#0A1F44" stroke-width="3.2" stroke-linecap="round"/><circle cx="22.8" cy="16" r="2.1" fill="#0A1F44"/></svg>
+            <span class="text-lg font-bold tracking-tight">Credital</span>
+          </a>
+          <p class="mt-3 max-w-xs text-sm">A global peer-to-peer lending marketplace. Lend across borders. Borrow without a bank.</p>
+        </div>
+        <nav aria-label="Product">
+          <h2 class="text-sm font-semibold text-white">Product</h2>
+          <ul class="mt-3 space-y-2 text-sm">
+            <li><a class="hover:text-white" href="#how">How it works</a></li>
+            <li><a class="hover:text-white" href="#rating-engine">Ratings &amp; calculator</a></li>
+            <li><a class="hover:text-white" href="#lend">Why lend</a></li>
+            <li><a class="hover:text-white" href="#borrow">Why borrow</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Company">
+          <h2 class="text-sm font-semibold text-white">Company</h2>
+          <ul class="mt-3 space-y-2 text-sm">
+            <li><a class="hover:text-white" href="#trust">Trust &amp; risk</a></li>
+            <li><a class="hover:text-white" href="#faq">FAQ</a></li>
+            <li><a class="hover:text-white" href="#waitlist">Join the waitlist</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Legal">
+          <h2 class="text-sm font-semibold text-white">Legal</h2>
+          <ul class="mt-3 space-y-2 text-sm">
+            <li><a class="hover:text-white" href="#" data-placeholder-link>Terms &amp; conditions</a></li>
+            <li><a class="hover:text-white" href="#" data-placeholder-link>Privacy policy</a></li>
+            <li><a class="hover:text-white" href="#" data-placeholder-link>Risk disclosure</a></li>
+            <li><a class="hover:text-white" href="#" data-placeholder-link>Cookie settings</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="mt-10 rounded-xl border border-white/10 bg-white/[0.04] p-5 text-xs leading-relaxed text-white/75" role="note" aria-label="Regulatory disclaimer">
+        <p><strong class="text-white">Capital at risk.</strong> Lending through Credital carries risk. You may lose some or all of the money you lend, and illustrative or past returns are not a reliable guide to future results. Credital is not a bank. Loans and balances on Credital are not bank deposits and are not covered by any deposit guarantee scheme (such as the FDIC, FSCS or an equivalent) or by any investor compensation scheme.</p>
+        <p class="mt-3">Credital's services are subject to local laws and regulation and may not be available in all countries or to all persons. Availability is subject to regulatory approval where required. All rates, fees, ratings, examples and figures on this page are illustrative and for information only. They are not an offer, quote or forecast, and are not investment, tax, credit or legal advice. Product features described are planned and may change; final terms will be set out in Credital's terms and conditions. Credit ratings shown are Credital's own internal ratings and are not issued by a credit rating agency.</p>
+        <p class="mt-3 text-white/65">[Placeholder: Credital legal entity name, company registration number, registered address, and regulator and licence details for each market.]</p>
+      </div>
+      <p class="mt-6 text-xs text-white/65">&copy; 2026 Credital. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <noscript>
+    <p style="position:fixed;bottom:0;left:0;right:0;background:#F5B453;color:#0A1F44;padding:.75rem 1rem;text-align:center;font:600 14px system-ui">The calculator, globe and toggles need JavaScript. The rest of the page works without it.</p>
+  </noscript>
+
+  <script>
+  (function () {
+    'use strict';
+
+    /* =====================================================================
+       CONFIG
+       Set WAITLIST_ENDPOINT to a URL that accepts a JSON POST
+       ({ email, role, country, source, ts }) to collect signups.
+       ===================================================================== */
+    var WAITLIST_ENDPOINT = '';
+
+    var root = document.documentElement;
+    var $ = function (s, c) { return (c || document).querySelector(s); };
+    var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* =====================================================================
+       PRICING MODEL  (all figures illustrative)
+       APR   = base(rating, 12-month reference) x termFactor(months)
+       termFactor = 1 + 0.008 x (months - 12)
+       Lender net = APR - servicing fee - (annual default rate x loss given default)
+       Borrower cost = interest + origination fee (deducted at payout)
+       ===================================================================== */
+    var RATINGS = [
+      { id: 'AAA', base: 6.0,  pd: 0.3 },
+      { id: 'AA',  base: 7.5,  pd: 0.6 },
+      { id: 'A',   base: 9.5,  pd: 1.2 },
+      { id: 'BBB', base: 12.0, pd: 2.5 },
+      { id: 'BB',  base: 16.0, pd: 5.5 },
+      { id: 'B',   base: 22.0, pd: 11 },
+      { id: 'CCC', base: 30.0, pd: 20 }
+    ];
+    var FEE_LENDER = 1.0;   // % of outstanding balance, per year
+    var LGD = 0.7;          // loss given default
+    var FEE_ORIG = 2.0;     // % of principal, one-off
+
+    function termFactor(m) { return 1 + 0.008 * (m - 12); }
+    function r2(x) { return Math.round(x * 100) / 100; }
+
+    function allInApr(received, pmt, n) {
+      var lo = 1e-9, hi = 1;
+      for (var k = 0; k < 80; k++) {
+        var x = (lo + hi) / 2;
+        var f = pmt * (1 - Math.pow(1 + x, -n)) / x - received;
+        if (f > 0) lo = x; else hi = x;
+      }
+      return (lo + hi) / 2 * 1200;
+    }
+
+    function quote(ri, P, n) {
+      var r = RATINGS[ri];
+      var apr = Math.round(r.base * termFactor(n) * 10) / 10;
+      var i = apr / 1200;
+      var pmtExact = P * i / (1 - Math.pow(1 + i, -n));
+      var pmt = r2(pmtExact);
+      var total = r2(pmt * n);
+      var interest = r2(total - P);
+      var balanceYears = (pmtExact * n - P) / (apr / 100);
+      var fee = r2(balanceYears * FEE_LENDER / 100);
+      var loss = r2(balanceYears * r.pd * LGD / 100);
+      var orig = r2(P * FEE_ORIG / 100);
+      return {
+        r: r, apr: apr, apy: (Math.pow(1 + i, 12) - 1) * 100,
+        pmt: pmt, total: total, interest: interest,
+        fee: fee, loss: loss, net: r2(interest - fee - loss),
+        lossPts: r.pd * LGD, netYield: apr - FEE_LENDER - r.pd * LGD,
+        orig: orig, received: r2(P - orig), cost: r2(interest + orig),
+        allIn: allInApr(P - orig, pmt, n)
+      };
+    }
+
+    function usd(x, signed) {
+      var s = x < 0 ? '−' : (signed ? '+' : '');
+      return s + '$' + Math.abs(x).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function pct(x, d) { return (Math.round(x * 100) / 100).toFixed(d === undefined ? 1 : d) + '%'; }
+    function set(id, text) { var el = document.getElementById(id); if (el) el.textContent = text; }
+
+    /* ---------- Jim & Diego example (same model as the calculator) ---------- */
+    (function () {
+      var q = quote(3, 500, 12);
+      set('ex-net', usd(q.net));
+      set('ex-gross', pct(q.apr));
+      set('ex-netyield', pct(q.netYield));
+      set('ex-pmt', usd(q.pmt));
+      set('ex-cost', usd(q.cost));
+      set('ex-allin', pct(q.allIn));
+    })();
+
+    /* =====================================================================
+       AUDIENCE STATE  (lend | borrow) shared by hero, tabs, calculator, form
+       ===================================================================== */
+    var tabs = $$('[data-aud-tab]');
+    var radios = $$('[data-aud-radio]');
+
+    function setAudience(a, opts) {
+      if (a !== 'lend' && a !== 'borrow') return;
+      root.setAttribute('data-audience', a);
+      radios.forEach(function (r) { r.checked = (r.value === a); });
+      tabs.forEach(function (t) {
+        var on = t.getAttribute('data-aud-tab') === a;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+      });
+      if (!(opts && opts.silent)) { try { localStorage.setItem('credital-aud', a); } catch (e) {} }
+      updateCalc(true);
+    }
+
+    radios.forEach(function (r) {
+      r.addEventListener('change', function () { if (r.checked) setAudience(r.value); });
+    });
+    tabs.forEach(function (t, idx) {
+      t.addEventListener('click', function () { setAudience(t.getAttribute('data-aud-tab')); });
+      t.addEventListener('keydown', function (e) {
+        var k = e.key, next = null;
+        if (k === 'ArrowRight' || k === 'ArrowDown') next = (idx + 1) % tabs.length;
+        else if (k === 'ArrowLeft' || k === 'ArrowUp') next = (idx - 1 + tabs.length) % tabs.length;
+        else if (k === 'Home') next = 0;
+        else if (k === 'End') next = tabs.length - 1;
+        if (next !== null) {
+          e.preventDefault();
+          setAudience(tabs[next].getAttribute('data-aud-tab'));
+          tabs[next].focus();
+        }
+      });
+    });
+
+    /* =====================================================================
+       CALCULATOR
+       ===================================================================== */
+    var st = { r: 3, amount: 500, months: 12, fx: 0 };
+    var amountNum = $('#amount-num'), amountRng = $('#amount-rng'), termRng = $('#term-rng'), fxSel = $('#fx');
+    var liveTimer = null;
+
+    function paint(rng) {
+      var p = (rng.value - rng.min) / (rng.max - rng.min) * 100;
+      rng.style.setProperty('--p', p + '%');
+    }
+    function clampAmount(v) { return Math.min(5000, Math.max(100, v)); }
+
+    function updateCalc(quiet) {
+      var mode = root.getAttribute('data-audience');
+      var q = quote(st.r, st.amount, st.months);
+      var why = 'Set by rating ' + q.r.id + ' × ' + st.months + '-month term';
+
+      $$('#rating-table tbody tr').forEach(function (tr) {
+        var on = Number(tr.getAttribute('data-rating')) === st.r;
+        tr.classList.toggle('bg-accent-tint', on);
+        if (on) tr.setAttribute('aria-current', 'true'); else tr.removeAttribute('aria-current');
+      });
+
+      set('term-out', st.months + (st.months === 1 ? ' month' : ' months'));
+
+      // Lender view
+      set('l-apr', pct(q.apr));
+      set('l-apy', pct(q.apy));
+      set('l-why', why);
+      set('l-int', usd(q.interest, true));
+      set('l-fee', usd(-q.fee));
+      set('l-loss', usd(-q.loss));
+      set('l-pd', pct(q.r.pd, q.r.pd % 1 ? 1 : 0));
+      set('l-net', usd(q.net, true));
+      set('l-netyield', pct(q.netYield) + ' a year, net');
+      set('l-back', 'You’d expect about ' + usd(st.amount + q.net) + ' back on $' + st.amount.toLocaleString('en-US') + ' lent.');
+      var total = Math.max(q.apr, 0.0001);
+      var netW = Math.max(0, q.netYield) / total * 100, feeW = FEE_LENDER / total * 100, lossW = q.lossPts / total * 100;
+      $('#l-bar-net').style.width = netW + '%';
+      $('#l-bar-fee').style.width = feeW + '%';
+      $('#l-bar-loss').style.width = lossW + '%';
+      set('l-netpts', pct(q.netYield));
+      set('l-feepts', pct(FEE_LENDER));
+      set('l-losspts', pct(q.lossPts, 2).replace(/\.?0+%$/, '%'));
+      $('#l-bar').setAttribute('aria-label', 'Of the ' + pct(q.apr) + ' gross yield, ' + pct(q.netYield) + ' is expected net return, ' + pct(FEE_LENDER) + ' goes to the servicing fee and ' + pct(q.lossPts, 2) + ' to expected credit losses.');
+
+      var fxRow = $('#l-fxrow');
+      var fxNet = null;
+      if (st.fx !== 0) {
+        fxNet = r2((st.amount + q.net) * (1 + st.fx / 100) - st.amount);
+        fxRow.hidden = false;
+        set('l-fxlabel', 'If the currency moves ' + (st.fx > 0 ? '+' : '−') + Math.abs(st.fx) + '%');
+        set('l-fxval', usd(fxNet, true) + ' (' + (fxNet >= 0 ? '+' : '−') + pct(Math.abs(fxNet) / st.amount * 100) + ' of $' + st.amount.toLocaleString('en-US') + ')');
+      } else {
+        fxRow.hidden = true;
+      }
+
+      // Borrower view
+      set('b-apr', pct(q.apr));
+      set('b-why', why);
+      set('b-pmt', usd(q.pmt));
+      set('b-n', String(st.months));
+      set('b-int', usd(q.interest));
+      set('b-fee', usd(q.orig));
+      set('b-recv', usd(q.received));
+      set('b-cost', usd(q.cost));
+      set('b-total', usd(q.total));
+      set('b-allin', pct(q.allIn));
+
+      // Screen-reader summary (debounced so dragging a slider is not noisy)
+      if (!quiet) {
+        clearTimeout(liveTimer);
+        liveTimer = setTimeout(function () {
+          var msg = mode === 'lend'
+            ? 'Rating ' + q.r.id + ', ' + usd(st.amount) + ' over ' + st.months + ' months: annualised yield ' + pct(q.apr) + ', expected net return ' + usd(q.net) + '.'
+            : 'Rating ' + q.r.id + ', ' + usd(st.amount) + ' over ' + st.months + ' months: APR ' + pct(q.apr) + ', monthly repayment ' + usd(q.pmt) + ', total cost of credit ' + usd(q.cost) + '.';
+          set('calc-live', msg);
+        }, 600);
+      }
+    }
+
+    $$('input[name="rating"]').forEach(function (r) {
+      r.addEventListener('change', function () { if (r.checked) { st.r = Number(r.value); updateCalc(); } });
+    });
+    amountRng.addEventListener('input', function () {
+      st.amount = Number(amountRng.value); amountNum.value = st.amount; paint(amountRng); updateCalc();
+    });
+    amountNum.addEventListener('input', function () {
+      var v = parseFloat(amountNum.value);
+      if (isFinite(v) && v >= 100 && v <= 5000) { st.amount = v; amountRng.value = v; paint(amountRng); updateCalc(); }
+    });
+    amountNum.addEventListener('change', function () {
+      var v = parseFloat(amountNum.value);
+      st.amount = clampAmount(isFinite(v) ? v : 500);
+      amountNum.value = st.amount; amountRng.value = st.amount; paint(amountRng); updateCalc();
+    });
+    termRng.addEventListener('input', function () { st.months = Number(termRng.value); paint(termRng); updateCalc(); });
+    fxSel.addEventListener('change', function () { st.fx = Number(fxSel.value); updateCalc(); });
+    paint(amountRng); paint(termRng);
+
+    /* =====================================================================
+       DIVERSIFICATION WIDGET
+       ===================================================================== */
+    (function () {
+      var rng = $('#div-rng'), grid = $('#div-grid'), out = $('#div-out'), label = $('#div-n');
+      if (!rng) return;
+      var UNITS = 100, TOTAL = 1000;
+      function render() {
+        var n = Number(rng.value);
+        var each = TOTAL / n;
+        var html = '', hit = 0;
+        for (var u = 0; u < UNITS; u++) {
+          var loan = Math.floor(u * n / UNITS);
+          var cls = loan === 0 ? 'bg-amber-400' : (loan % 2 ? 'bg-accent/60' : 'bg-accent/35');
+          if (loan === 0) hit++;
+          html += '<span class="aspect-square rounded-sm ' + cls + '"></span>';
+        }
+        grid.innerHTML = html;
+        var share = 100 / n;
+        var shareTxt = share >= 10 ? Math.round(share) : (Math.round(share * 10) / 10);
+        label.textContent = n + (n === 1 ? ' loan of $' : ' loans of $') + Math.round(each).toLocaleString('en-US');
+        out.innerHTML = 'One default costs you at most <strong class="text-navy-900">' + shareTxt + '%</strong> of $1,000' + (n > 1 ? ' (about $' + Math.round(each).toLocaleString('en-US') + ')' : '') + ', before any recoveries.';
+        paint(rng);
+      }
+      rng.addEventListener('input', render);
+      render();
+    })();
+
+    /* =====================================================================
+       MOBILE MENU
+       ===================================================================== */
+    (function () {
+      var btn = $('#menu-btn'), nav = $('#mobile-nav'), ico = $('#menu-ico use');
+      function toggle(open) {
+        nav.hidden = !open;
+        btn.setAttribute('aria-expanded', String(open));
+        ico.setAttribute('href', open ? '#i-close' : '#i-menu');
+      }
+      btn.addEventListener('click', function () { toggle(nav.hidden); });
+      $$('a', nav).forEach(function (a) { a.addEventListener('click', function () { toggle(false); }); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !nav.hidden) { toggle(false); btn.focus(); }
+      });
+      window.matchMedia('(min-width: 1024px)').addEventListener('change', function (m) { if (m.matches) toggle(false); });
+    })();
+
+    $$('a[data-placeholder-link]').forEach(function (a) {
+      a.addEventListener('click', function (e) { e.preventDefault(); });
+    });
+
+    /* =====================================================================
+       WAITLIST FORM
+       ===================================================================== */
+    (function () {
+      var form = $('#wl-form'), email = $('#wl-email'), err = $('#wl-err'), btn = $('#wl-btn');
+      var wrap = $('#wl-formwrap'), ok = $('#wl-success');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if ($('#wl-hp').value) return;                       // honeypot
+        var v = email.value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) {
+          err.textContent = 'Please enter a valid email address.';
+          email.setAttribute('aria-invalid', 'true');
+          email.focus();
+          return;
+        }
+        err.textContent = ''; email.removeAttribute('aria-invalid');
+        var role = root.getAttribute('data-audience');
+        btn.disabled = true; btn.textContent = 'Joining…';
+        var payload = { email: v, role: role, country: $('#wl-country').value.trim(), source: location.href, ts: new Date().toISOString() };
+
+        var send = WAITLIST_ENDPOINT
+          ? fetch(WAITLIST_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+              .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); })
+          : Promise.resolve();
+
+        send.then(function () {
+          wrap.classList.add('hidden');
+          ok.classList.remove('hidden');
+          set('wl-success-msg', role === 'lend'
+            ? 'We’ll email you when Credital opens to lenders in your market.'
+            : 'We’ll email you when Credital opens to borrowers in your market.');
+          if (!WAITLIST_ENDPOINT) $('#wl-demo').classList.remove('hidden');
+          ok.focus();
+        }).catch(function () {
+          btn.disabled = false; btn.textContent = 'Join the waitlist';
+          err.textContent = 'Something went wrong. Please try again.';
+        });
+      });
+      email.addEventListener('input', function () { if (err.textContent) { err.textContent = ''; email.removeAttribute('aria-invalid'); } });
+    })();
+
+    /* =====================================================================
+       GLOBE: dotted orthographic globe, capital flowing New York -> Johannesburg
+       ===================================================================== */
+    (function () {
+      var wrap = $('#globe-wrap'), canvas = $('#globe');
+      if (!wrap || !canvas || !canvas.getContext) return;
+      var ctx = canvas.getContext('2d');
+
+      var LAND = {"STEP":2,"LAT0":-56,"N":[101,106,111,116,120,125,129,134,138,142,146,149,153,156,159,162,164,167,169,171,173,175,176,177,178,179,180,180,180,180,180,179,178,177,176,175,173,171,169,167,164,162,159,156,153,149,146,142,138,134,129,125,120,116,111,106,101,95,90,85,79,73,67,62,56,50,44,37,31,25],"b64":"AAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAAAAOAAAAAAAAAAAAAMAAAAAAHAAAAAAAAAAAAAAgAAAAAAeAAAAAAAAAAAABAEAAAAAAB4AAAAAAAAAAAAAACAAAAAAA/AAAAAAAAAAAAA4AIAAAAAAA/AAAAAAAAAAAAAPAEAAAAAAAH8AAAADAAAAAAMD+AAAAAAAAAH+AAAAB8AAAAAB8/wAAAAAAAAAf8AAAAH4AAAAAD//wAAAAAAAAAP/AAAAD/AAAAAA//+AAAAAAAAAA/8AAAAH+AAAAAB//+AAAAAAAAAAf/AAAAD/hgAAAAf//AAAAAAAAAAD/+AAAAf+GAAAAA//8BAAAAAAAAAD//AAAAf+GAAAAAP/8AAAAAAAAAAB//wAAAP/xwAAAAAf/AAAAAAAAAAAf//AAAA//zAAAAAA/MAAAAAAAAAAB///AAAA//wgAAAAADkAAAAAAAAAAA///wAAAH/8AAAAAAAZAAAAAAAAAAAP//+AAAB//AAAAAAFABAAAAAAAAAAB///4AAAP/4AAAAAOADoAAAAAAAAAAP///gAAAf/wAAAABAAH1AAAAAAAAAAf//+AAAA//wAAAAGEA/CAAAAAAAAAAP//wAAAB//4AAAAMcgsAAAAAAAAAAAP/+AAAAB//4AAAAMeAAAAAAAAAAAAAH/+AAAAB//+AAAAcOAAAAAAAAAAAAAH/8AAAAD///AAAAsGAAAAAAAAAAAAAH/gAAA/P///AAEAQEQAAAAAAAAAAAAf+AAAD////+AAQBADgAAAAAAAAAAAY3gAAA/////wAEABAAAAAAAAAAAAACAAAAAP////gABgC4AAAAAAAAAAAAHgAAAAH////+AAwB+DAAAAAAAAAAAeAAAAAD////PgBwH8EAAAAAAAAAAH8JAAAAP///9/APg/AQAAAAACAAADxBAAAAD///+/4D8fkAAAAAAEAAADwKAAAAD///+/4P+/8AAAAAAAAAAvAAAAAAP///v+D///4AAAAAAAAAXwEAAAAH///v4////8AAAAAAAAA/wIAAAAH////f////wAAAAAAAAH/iAAAAA/////////4AAAAAAAAf/8AAAAD/5h//////AAAAAAAAP//gAAAAfwA/////+DAAAAAAA///AAAAAeAD/////zMAAAAAAf//gAAADgl/z////MIAAAAAH//+AAAA4hf9////sAAAAAAH//+AAADzuRn////hAAAAAD///AAAA6+Gf////mAAAAA///6AAAf/XP////gAAAAD///MAAH///////8AAAAH//+QAAP//////+AAAAD//fwAC3//////8AAAA//34ABR//////AgAgP/48AAIX/////BgAg/+HgACE/////hAPv/wYAAHn////+gP//hAgAd/////+D//0jhA3/////7//znGD7////5/12PAPn///45PcfAYD//0AXY+ABH+QAEA+AAOAAAg+AI4AAX4AAAAbxBAAfAAA="};
+
+      var RAD = Math.PI / 180;
+      function vec(lat, lon) {
+        var c = Math.cos(lat * RAD);
+        return [c * Math.cos(lon * RAD), c * Math.sin(lon * RAD), Math.sin(lat * RAD)];
+      }
+
+      // Decode land dots
+      var dots = [];
+      (function () {
+        var bin = atob(LAND.b64), bit = 0;
+        for (var r = 0; r < LAND.N.length; r++) {
+          var lat = LAND.LAT0 + r * LAND.STEP, n = LAND.N[r];
+          for (var i = 0; i < n; i++, bit++) {
+            if ((bin.charCodeAt(bit >> 3) >> (7 - (bit & 7))) & 1) {
+              dots.push(vec(lat, -180 + (i + 0.5) * 360 / n));
+            }
+          }
+        }
+      })();
+
+      // Graticule (every 30 degrees)
+      var grat = [];
+      (function () {
+        var lon, lat, line, k;
+        for (lon = -180; lon < 180; lon += 30) { line = []; for (k = -90; k <= 90; k += 6) line.push(vec(k, lon)); grat.push(line); }
+        for (lat = -60; lat <= 60; lat += 30) { line = []; for (k = -180; k <= 180; k += 6) line.push(vec(lat, k)); grat.push(line); }
+      })();
+
+      var A = vec(40.71, -74.0);     // New York (lender)
+      var B = vec(-26.2, 28.05);     // Johannesburg (borrower)
+      var omega = Math.acos(A[0] * B[0] + A[1] * B[1] + A[2] * B[2]);
+      function arcPt(t, h) {
+        var s1 = Math.sin((1 - t) * omega) / Math.sin(omega), s2 = Math.sin(t * omega) / Math.sin(omega);
+        var k = 1 + h * Math.sin(Math.PI * t);
+        return [(s1 * A[0] + s2 * B[0]) * k, (s1 * A[1] + s2 * B[1]) * k, (s1 * A[2] + s2 * B[2]) * k];
+      }
+
+      var size = 0, dpr = 1;
+      var chipA = $('#chip-a'), chipB = $('#chip-b');
+
+      function resize() {
+        var rect = wrap.getBoundingClientRect();
+        size = rect.width;
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(size * dpr);
+        canvas.height = Math.round(size * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        if (!running) draw(2600);
+      }
+
+      var lam0, phi0, cl, sl, cp, sp, R, cx, cy, PA, PB;
+      // Point on a flight arc: hugs the great circle, then bows sideways on screen so the arc reads as a curve
+      function arcProj(t, bulge) {
+        var base = project(arcPt(t, 0.05));
+        var dx = PB[0] - PA[0], dy = PB[1] - PA[1], len = Math.sqrt(dx * dx + dy * dy) || 1;
+        var off = bulge * len * Math.sin(Math.PI * t);
+        return [base[0] + dy / len * off, base[1] - dx / len * off, base[2], base[3]];
+      }
+      function project(v) {
+        var a = v[0] * cl + v[1] * sl;
+        var b = v[1] * cl - v[0] * sl;
+        var X = b, Y = cp * v[2] - sp * a, Z = sp * v[2] + cp * a;
+        return [cx + R * X, cy - R * Y, Z, X * X + Y * Y];
+      }
+
+      function draw(t) {
+        cx = size / 2; cy = size / 2; R = size * 0.42;
+        var sway = reduceMotion ? 0 : Math.sin(t / 9000) * 8 * RAD;
+        var tilt = reduceMotion ? 0 : Math.sin(t / 13000) * 3 * RAD;
+        lam0 = -17 * RAD + sway; phi0 = 11 * RAD + tilt;
+        cl = Math.cos(lam0); sl = Math.sin(lam0); cp = Math.cos(phi0); sp = Math.sin(phi0);
+        PA = project(A); PB = project(B);
+
+        ctx.clearRect(0, 0, size, size);
+
+        // Atmosphere glow
+        var g = ctx.createRadialGradient(cx, cy, R * 0.96, cx, cy, R * 1.22);
+        g.addColorStop(0, 'rgba(52,211,160,0.22)'); g.addColorStop(1, 'rgba(52,211,160,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R * 1.22, 0, 6.2832); ctx.fill();
+
+        // Ocean sphere
+        var s = ctx.createRadialGradient(cx - R * 0.35, cy - R * 0.4, R * 0.1, cx, cy, R);
+        s.addColorStop(0, '#1B3A6E'); s.addColorStop(0.6, '#102B58'); s.addColorStop(1, '#0A1F44');
+        ctx.fillStyle = s; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.2832); ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.14)'; ctx.lineWidth = 1; ctx.stroke();
+
+        // Graticule
+        ctx.strokeStyle = 'rgba(255,255,255,0.07)'; ctx.lineWidth = 1;
+        for (var gi = 0; gi < grat.length; gi++) {
+          var line = grat[gi], pen = false;
+          ctx.beginPath();
+          for (var pi = 0; pi < line.length; pi++) {
+            var p = project(line[pi]);
+            if (p[2] > 0) { if (pen) ctx.lineTo(p[0], p[1]); else { ctx.moveTo(p[0], p[1]); pen = true; } } else pen = false;
+          }
+          ctx.stroke();
+        }
+
+        // Land dots
+        for (var i = 0; i < dots.length; i++) {
+          var q = project(dots[i]);
+          if (q[2] <= 0.02) continue;
+          var z = q[2];
+          ctx.globalAlpha = 0.18 + 0.72 * z;
+          ctx.fillStyle = '#9FB6D9';
+          var rr = 0.9 + 0.9 * z * (size / 560 + 0.4);
+          ctx.beginPath(); ctx.arc(q[0], q[1], rr, 0, 6.2832); ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+
+        var time = t;
+        // Repayment arc (low, dashed) and funding arc (high, solid)
+        drawArc(-0.12, 'rgba(255,255,255,0.55)', [2, 6], 1.2);
+        drawArc(0.25, 'rgba(52,211,160,0.8)', [], 2);
+
+        // Particles: funds out (A -> B)
+        for (var k = 0; k < 4; k++) {
+          var ph = ((time / 6500) + k / 4) % 1;
+          for (var tail = 0; tail < 9; tail++) {
+            var tt = ph - tail * 0.011; if (tt < 0) continue;
+            var pp = arcProj(tt, 0.25);
+            if (pp[2] < 0 && pp[3] < 1) continue;
+            ctx.globalAlpha = (1 - tail / 9) * 0.95;
+            ctx.fillStyle = '#34D3A0';
+            ctx.beginPath(); ctx.arc(pp[0], pp[1], 3.4 * (1 - tail / 14), 0, 6.2832); ctx.fill();
+          }
+        }
+        // Particles: repayments back (B -> A)
+        for (var m = 0; m < 3; m++) {
+          var ph2 = 1 - (((time / 9500) + m / 3) % 1);
+          for (var tl = 0; tl < 6; tl++) {
+            var t2 = ph2 + tl * 0.011; if (t2 > 1) continue;
+            var p2 = arcProj(t2, -0.12);
+            ctx.globalAlpha = (1 - tl / 6) * 0.9;
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath(); ctx.arc(p2[0], p2[1], 2.4 * (1 - tl / 10), 0, 6.2832); ctx.fill();
+          }
+        }
+        ctx.globalAlpha = 1;
+
+        // Endpoints
+        var pa = PA, pb = PB;
+        marker(pa, '#34D3A0', time);
+        marker(pb, '#FFFFFF', time + 700);
+        if (chipA) chipA.style.transform = 'translate(' + pa[0].toFixed(1) + 'px,' + pa[1].toFixed(1) + 'px)';
+        if (chipB) chipB.style.transform = 'translate(' + pb[0].toFixed(1) + 'px,' + pb[1].toFixed(1) + 'px)';
+      }
+
+      function drawArc(h, color, dash, w) {
+        ctx.save();
+        ctx.strokeStyle = color; ctx.lineWidth = w; ctx.setLineDash(dash); ctx.lineCap = 'round';
+        ctx.beginPath();
+        var pen = false;
+        for (var i = 0; i <= 64; i++) {
+          var p = arcProj(i / 64, h);
+          if (p[2] > 0 || p[3] > 1) { if (pen) ctx.lineTo(p[0], p[1]); else { ctx.moveTo(p[0], p[1]); pen = true; } } else pen = false;
+        }
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function marker(p, color, t) {
+        var ph = reduceMotion ? 0.35 : ((t / 1800) % 1);
+        ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+        ctx.globalAlpha = 1 - ph;
+        ctx.beginPath(); ctx.arc(p[0], p[1], 6 + 16 * ph, 0, 6.2832); ctx.stroke();
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = color; ctx.strokeStyle = '#0A1F44'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(p[0], p[1], 5.5, 0, 6.2832); ctx.fill(); ctx.stroke();
+      }
+
+      // Run only while visible
+      var running = false, visible = true, raf = 0;
+      function loop(t) {
+        if (!visible || document.hidden) { running = false; return; }
+        draw(t);
+        raf = requestAnimationFrame(loop);
+      }
+      function start() {
+        if (reduceMotion || running || !visible || document.hidden) return;
+        running = true; raf = requestAnimationFrame(loop);
+      }
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) start(); }).observe(wrap);
+      }
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) start(); });
+      if ('ResizeObserver' in window) new ResizeObserver(resize).observe(wrap); else window.addEventListener('resize', resize);
+      resize();
+      draw(2600);
+      start();
+    })();
+
+    /* =====================================================================
+       INIT
+       ===================================================================== */
+    (function () {
+      var a = null;
+      try { var p = new URLSearchParams(location.search).get('for'); if (p === 'lend' || p === 'borrow') a = p; } catch (e) {}
+      if (!a) { try { var s = localStorage.getItem('credital-aud'); if (s === 'lend' || s === 'borrow') a = s; } catch (e) {} }
+      setAudience(a || 'lend', { silent: true });
+      updateCalc(true);
+    })();
+  })();
+  </script>
+</body>
+</html>

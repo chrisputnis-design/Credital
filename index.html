@@ -18,7 +18,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -28,11 +28,12 @@
           colors: {
             navy: { 950: '#07142E', 900: '#0B1F44', 800: '#12305F', 700: '#1D3F77' },
             paper: '#F4F6FA',
+            volt: '#C8FF3D',
             line: '#DDE3EC'
           },
           fontFamily: {
             sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
-            serif: ['"Source Serif 4"', 'Georgia', 'Cambria', 'Times New Roman', 'serif']
+            serif: ['"Space Grotesk"', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif']
           },
           boxShadow: {
             soft: '0 1px 2px rgba(11,31,68,.06), 0 12px 32px rgba(11,31,68,.08)'
@@ -45,64 +46,123 @@
   <style type="text/tailwindcss">
     @layer base {
       html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
-      body { @apply bg-white font-sans text-slate-700 antialiased; }
+      body { @apply bg-navy-950 font-sans text-slate-300 antialiased; }
     }
     @layer components {
-      .container-x { @apply mx-auto w-full max-w-5xl px-5 sm:px-8; }
-      .section { @apply py-16 sm:py-24; }
-      .eyebrow { @apply text-sm font-semibold uppercase tracking-wider text-navy-700; }
-      .h2 { @apply font-serif text-3xl font-semibold leading-tight tracking-tight text-navy-900 sm:text-4xl; }
-      .lead { @apply text-lg leading-relaxed text-slate-600; }
-      .btn { @apply inline-flex items-center justify-center rounded-md px-6 py-3.5 text-base font-semibold transition-colors duration-150 sm:whitespace-nowrap; }
-      .btn-primary { @apply bg-navy-900 text-white hover:bg-navy-700; }
+      .container-x { @apply mx-auto w-full max-w-6xl px-5 sm:px-8; }
+      .section { @apply py-20 sm:py-32; }
+      .eyebrow { @apply text-sm font-semibold uppercase tracking-[.2em] text-volt; }
+      .h2 { @apply font-serif text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-6xl; }
+      .lead { @apply text-lg leading-relaxed text-slate-300 sm:text-xl; }
+      .btn { @apply inline-flex items-center justify-center rounded-full px-7 py-3.5 text-base font-bold transition duration-150 sm:whitespace-nowrap; }
+      .btn-primary { @apply bg-volt text-navy-950 hover:scale-105 hover:shadow-[0_0_40px_rgba(200,255,61,.45)]; }
       .btn-outline { @apply border border-navy-900 text-navy-900 hover:bg-navy-900 hover:text-white; }
-      .field { @apply w-full rounded-md border border-slate-500 bg-white px-4 py-3 text-base text-navy-900 placeholder:text-slate-500; }
+      .field { @apply w-full rounded-xl border border-white/20 bg-navy-950/70 px-4 py-3.5 text-base text-white placeholder:text-slate-500; }
     }
   </style>
 
   <style>
-    :root { --focus: #1D3F77; }
-    .on-dark { --focus: #FFFFFF; }
+    :root { --focus: #C8FF3D; --volt: #C8FF3D; --glow: rgba(200,255,61,.18); --glow2: rgba(88,101,255,.35); }
+    body.is-stupid { --volt: #FF4D5E; }
     :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
     [hidden] { display: none !important; }
-    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; background: #fff; color: #0B1F44; padding: .75rem 1.25rem; border-radius: .375rem; font-weight: 600; }
+    [tabindex="-1"]:focus { outline: none; }
+    html { background: #07142E; }
+    .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; background: #C8FF3D; color: #07142E; padding: .75rem 1.25rem; border-radius: 999px; font-weight: 700; }
     .skip-link:focus { top: 1rem; }
-    .peer:focus-visible + label { outline: 3px solid var(--focus); outline-offset: 2px; }
-    /* iOS-style switch. Undecided = grey, knob centred; Cool = navy, knob left; Stupid = red, knob right. */
-    input[type=range].vote-rng { -webkit-appearance: none; appearance: none; display: block; width: 51px; height: 31px; margin: 0; padding: 0; background: #E5E5EA; cursor: pointer; border-radius: 999px; transition: background-color .25s; }
-    input[type=range].vote-rng[data-side=cool] { background: #0B1F44; }
-    input[type=range].vote-rng[data-side=stupid] { background: #B91C1C; }
+
+    /* ---------- hero atmosphere ---------- */
+    .hero { position: relative; overflow: hidden; isolation: isolate; }
+    .hero::before { content: ""; position: absolute; inset: 0; z-index: -2;
+      background: radial-gradient(60% 50% at 80% 0%, rgba(88,101,255,.45), transparent 70%), radial-gradient(50% 45% at 0% 30%, rgba(200,255,61,.16), transparent 70%), linear-gradient(#07142E, #05102A); }
+    .grid-bg { position: absolute; inset: 0; z-index: -1; opacity: .5;
+      background-image: linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 56px 56px; -webkit-mask-image: radial-gradient(70% 70% at 50% 35%, #000, transparent); mask-image: radial-gradient(70% 70% at 50% 35%, #000, transparent); }
+    .orb { position: absolute; z-index: -1; border-radius: 50%; filter: blur(70px); will-change: transform; }
+    .orb.a { width: 38rem; height: 38rem; left: -12rem; top: -8rem; background: rgba(200,255,61,.20); animation: drift 16s ease-in-out infinite alternate; }
+    .orb.b { width: 34rem; height: 34rem; right: -10rem; top: 10rem; background: rgba(88,101,255,.45); animation: drift 20s ease-in-out infinite alternate-reverse; }
+    @keyframes drift { to { transform: translate3d(7rem, 5rem, 0) scale(1.15); } }
+    .spot { position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 30%), rgba(200,255,61,.10), transparent 60%); }
+    #fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60; }
+
+    .shine { background: linear-gradient(100deg, #fff 0%, #C8FF3D 35%, #7DF9FF 65%, #fff 100%); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shine 6s linear infinite; }
+    @keyframes shine { to { background-position: 200% center; } }
+    .pill { display: inline-flex; align-items: center; gap: .6rem; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); backdrop-filter: blur(8px); border-radius: 999px; padding: .4rem 1rem; font-size: .8rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: #fff; }
+    .pill i { width: .55rem; height: .55rem; border-radius: 50%; background: #C8FF3D; box-shadow: 0 0 0 0 rgba(200,255,61,.7); animation: ping 2s infinite; }
+    @keyframes ping { to { box-shadow: 0 0 0 .8rem rgba(200,255,61,0); } }
+
+    /* ---------- vote card ---------- */
+    .vote-card { position: relative; border-radius: 1.75rem; padding: 1px; background: linear-gradient(135deg, rgba(200,255,61,.8), rgba(88,101,255,.7) 50%, rgba(255,255,255,.1)); box-shadow: 0 30px 80px rgba(0,0,0,.45), 0 0 80px var(--glow); transition: box-shadow .5s; }
+    .vote-card > .in { border-radius: calc(1.75rem - 1px); background: rgba(7,20,46,.88); backdrop-filter: blur(14px); padding: 1.75rem; }
+    body.is-stupid .vote-card { background: linear-gradient(135deg, rgba(255,77,94,.9), rgba(120,20,40,.6) 60%, rgba(255,255,255,.08)); box-shadow: 0 30px 80px rgba(0,0,0,.45), 0 0 80px rgba(255,77,94,.25); }
+    .shake { animation: shake .5s; }
+    @keyframes shake { 20%,60% { transform: translateX(-8px) rotate(-.6deg); } 40%,80% { transform: translateX(8px) rotate(.6deg); } }
+    .pop { animation: pop .5s cubic-bezier(.2,1.4,.4,1); }
+    @keyframes pop { from { opacity: 0; transform: translateY(14px) scale(.96); } }
+
+    /* iOS-style switch. Undecided = grey, knob centred; Cool = volt, knob left; Stupid = red, knob right. */
+    input[type=range].vote-rng { -webkit-appearance: none; appearance: none; display: block; width: 51px; height: 31px; margin: 0; padding: 0; background: #3A3A3C; cursor: pointer; border-radius: 999px; transition: background-color .25s; }
+    input[type=range].vote-rng[data-side=cool] { background: #C8FF3D; }
+    input[type=range].vote-rng[data-side=stupid] { background: #FF4D5E; }
     .vote-rng::-webkit-slider-runnable-track { height: 31px; border-radius: 999px; background: transparent; }
     .vote-rng::-moz-range-track { height: 31px; border-radius: 999px; background: transparent; }
-    .vote-rng::-webkit-slider-thumb { -webkit-appearance: none; width: 31px; height: 31px; border-radius: 50%; border: 2px solid transparent; background: #fff padding-box; box-shadow: 0 3px 8px rgba(0,0,0,.15), 0 3px 1px rgba(0,0,0,.06); }
-    .vote-rng::-moz-range-thumb { box-sizing: border-box; width: 31px; height: 31px; border-radius: 50%; border: 2px solid transparent; background: #fff padding-box; box-shadow: 0 3px 8px rgba(0,0,0,.15), 0 3px 1px rgba(0,0,0,.06); }
-    .vote-rng:focus-visible { outline: 3px solid #1D3F77; outline-offset: 3px; }
-    /* Email / phone switch */
-    .ios-sw { appearance: none; -webkit-appearance: none; position: relative; flex: none; width: 51px; height: 31px; margin: 0; border-radius: 999px; background: #0B1F44; cursor: pointer; transition: background .25s; }
-    .ios-sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,.15), 0 3px 1px rgba(0,0,0,.06); transition: transform .25s; }
+    .vote-rng::-webkit-slider-thumb { -webkit-appearance: none; width: 31px; height: 31px; border-radius: 50%; border: 2px solid transparent; background: #fff padding-box; box-shadow: 0 3px 8px rgba(0,0,0,.35), 0 3px 1px rgba(0,0,0,.1); }
+    .vote-rng::-moz-range-thumb { box-sizing: border-box; width: 31px; height: 31px; border-radius: 50%; border: 2px solid transparent; background: #fff padding-box; box-shadow: 0 3px 8px rgba(0,0,0,.35), 0 3px 1px rgba(0,0,0,.1); }
+    .vote-rng:focus-visible { outline: 3px solid #C8FF3D; outline-offset: 3px; }
+    .vote-big { transform-origin: center; transition: transform .25s, color .25s, opacity .25s; }
+    .vote-big.dim { opacity: .35; }
+    .vote-big.on { transform: scale(1.18); }
+    .ios-sw { appearance: none; -webkit-appearance: none; position: relative; flex: none; width: 51px; height: 31px; margin: 0; border-radius: 999px; background: #C8FF3D; cursor: pointer; transition: background .25s; }
+    .ios-sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,.35), 0 3px 1px rgba(0,0,0,.1); transition: transform .25s; }
     .ios-sw:checked::after { transform: translateX(20px); }
-    .vote-rng:disabled { cursor: default; }
+    .ios-sw:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+    /* ---------- marquee ---------- */
+    .marquee { overflow: hidden; border-block: 1px solid rgba(255,255,255,.1); background: #C8FF3D; color: #07142E; transform: rotate(-1.2deg) scale(1.03); margin-block: 1.5rem; }
+    .marquee .track { display: flex; width: max-content; animation: scroll 28s linear infinite; }
+    .marquee span { padding: .9rem 1.6rem; font: 700 1.1rem/1 "Space Grotesk", sans-serif; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+    .marquee span::after { content: "\2726"; margin-left: 3.2rem; }
+    @keyframes scroll { to { transform: translateX(-50%); } }
+
+    /* ---------- steps ---------- */
+    .step { position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,.1); border-radius: 1.5rem; background: linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,.02)); padding: 1.75rem; transition: transform .3s, border-color .3s, box-shadow .3s; }
+    .step:hover { transform: translateY(-8px); border-color: rgba(200,255,61,.7); box-shadow: 0 20px 60px rgba(200,255,61,.12); }
+    .step .num { font: 700 7rem/0.8 "Space Grotesk", sans-serif; color: transparent; -webkit-text-stroke: 1.5px rgba(200,255,61,.75); display: block; margin-bottom: 1.25rem; transition: color .3s; }
+    .step:hover .num { color: rgba(200,255,61,.15); }
+    .scale { height: 14px; border-radius: 999px; background: linear-gradient(90deg, #C8FF3D, #7DF9FF 40%, #7C83FF 70%, #FF4D5E); box-shadow: 0 0 40px rgba(124,131,255,.4); }
+    .glass { border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); border-radius: 1.5rem; }
+
+    /* ---------- call ---------- */
+    .call { position: relative; overflow: hidden; isolation: isolate; background: radial-gradient(60% 80% at 50% 120%, rgba(200,255,61,.28), transparent 70%), #0B1F44; }
+    .phone-link { display: inline-block; font: 700 clamp(2rem, 8.5vw, 5.5rem)/1.05 "Space Grotesk", sans-serif; color: #fff; text-decoration: none; letter-spacing: -.02em; transition: color .2s, text-shadow .2s, transform .2s; }
+    .phone-link:hover { color: #C8FF3D; text-shadow: 0 0 50px rgba(200,255,61,.6); transform: scale(1.03); }
+
+    /* ---------- reveal ---------- */
+    .js .rv { opacity: 0; transform: translateY(32px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); }
+    .js .rv.in { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { transition: none !important; animation: none !important; }
+      .js .rv { opacity: 1; transform: none; }
     }
   </style>
 </head>
 
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+  <canvas id="fx" aria-hidden="true"></canvas>
 
   <!-- ============ HEADER ============ -->
-  <header class="sticky top-0 z-50 border-b border-line bg-white/95 backdrop-blur">
+  <header class="sticky top-0 z-50 border-b border-white/10 bg-navy-950/70 backdrop-blur-xl">
     <div class="container-x flex h-16 items-center justify-between gap-4">
-      <a href="#top" class="flex items-center gap-2.5 text-navy-900" aria-label="Credital, back to top">
-        <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#0B1F44"/><path d="M21.5 11.2A7.2 7.2 0 1 0 21.5 20.8" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/></svg>
-        <span class="font-serif text-xl font-semibold tracking-tight">Credital</span>
+      <a href="#top" class="flex items-center gap-2.5 text-white" aria-label="Credital, back to top">
+        <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#C8FF3D"/><path d="M21.5 11.2A7.2 7.2 0 1 0 21.5 20.8" fill="none" stroke="#07142E" stroke-width="3.2" stroke-linecap="round"/></svg>
+        <span class="font-serif text-xl font-bold tracking-tight">Credital</span>
       </a>
-      <nav aria-label="Primary" class="flex items-center gap-5 text-sm font-medium">
-        <a class="hidden text-slate-700 hover:text-navy-900 sm:inline" href="#how">How it works</a>
-        <a class="hidden text-slate-700 hover:text-navy-900 sm:inline" href="#talk">Talk to us</a>
-        <a href="#vote" class="btn btn-primary !px-4 !py-2.5 text-sm">Cool or stupid?</a>
+      <nav aria-label="Primary" class="flex items-center gap-6 text-sm font-semibold">
+        <a class="hidden text-slate-300 hover:text-volt sm:inline" href="#how">How it works</a>
+        <a class="hidden text-slate-300 hover:text-volt sm:inline" href="#talk">Talk to us</a>
+        <a href="#vote" class="btn btn-primary !px-5 !py-2.5 text-sm">Cool or stupid?</a>
       </nav>
     </div>
   </header>
@@ -110,141 +170,130 @@
   <main id="main">
 
     <!-- ============ HERO ============ -->
-    <section id="top" class="bg-white" aria-labelledby="hero-h">
-      <div class="container-x py-14 text-center sm:py-20">
-        <div>
-          <p class="eyebrow">Lending marketplace</p>
-          <h1 id="hero-h" class="mt-4 font-serif text-4xl font-semibold leading-[1.1] tracking-tight text-navy-900 sm:text-5xl">Earn interest by lending to verified borrowers.</h1>
-          <p class="lead mx-auto mt-5 max-w-xl">Credital connects people who have money to lend with people who need a loan, at home and abroad. You lend. Borrowers repay you with interest.</p>
-          <div id="vote" class="mx-auto mt-9 max-w-xl rounded-lg border border-line bg-paper p-5 sm:p-6">
-            <label for="vote-range" class="font-serif text-2xl font-semibold text-navy-900">Cool or stupid?</label>
-            <p id="vote-hint" class="mt-1 text-sm text-slate-600">Flip the switch one way or the other.</p>
-            <div class="mt-4 flex items-center justify-center gap-3 text-base font-semibold text-navy-900"><span aria-hidden="true">Cool</span><input id="vote-range" class="vote-rng" type="range" min="0" max="100" step="1" value="50" aria-describedby="vote-hint" aria-valuetext="Undecided"><span aria-hidden="true">Stupid</span></div>
+    <section id="top" class="hero" aria-labelledby="hero-h">
+      <div class="grid-bg" aria-hidden="true"></div>
+      <div class="orb a" aria-hidden="true"></div>
+      <div class="orb b" aria-hidden="true"></div>
+      <div class="spot" aria-hidden="true"></div>
+      <div class="container-x pb-16 pt-16 text-center sm:pb-28 sm:pt-24">
+        <p class="pill rv"><i aria-hidden="true"></i>Lending marketplace</p>
+        <h1 id="hero-h" class="rv mx-auto mt-8 max-w-5xl font-serif text-[2.9rem] font-bold leading-[.98] tracking-tighter text-white sm:text-7xl lg:text-[6.5rem]" style="--d:.1s">Earn interest by lending to <span class="shine">verified borrowers.</span></h1>
+        <p class="lead rv mx-auto mt-8 max-w-2xl" style="--d:.2s">Credital connects people who have money to lend with people who need a loan, at home and abroad. You lend. Borrowers repay you with interest.</p>
 
-            <div id="vote-cool" tabindex="-1" class="mt-5 border-t border-line pt-5" hidden>
-              <p class="font-serif text-xl font-semibold text-navy-900">Sign up to the waitlist.</p>
+        <div id="vote" class="rv mx-auto mt-14 max-w-xl text-left" style="--d:.3s">
+          <div class="vote-card"><div class="in">
+            <label for="vote-range" class="block text-center font-serif text-4xl font-bold tracking-tight text-white sm:text-5xl">Cool or stupid?</label>
+            <p id="vote-hint" class="mt-2 text-center text-sm text-slate-400">Flip the switch one way or the other.</p>
+            <div class="mt-6 flex items-center justify-center gap-5 font-serif text-2xl font-bold text-white sm:text-3xl"><span id="lb-cool" class="vote-big" aria-hidden="true">Cool</span><input id="vote-range" class="vote-rng" type="range" min="0" max="100" step="1" value="50" aria-describedby="vote-hint" aria-valuetext="Undecided"><span id="lb-stupid" class="vote-big" aria-hidden="true">Stupid</span></div>
+
+            <div id="vote-cool" tabindex="-1" class="mt-7 border-t border-white/10 pt-6" hidden>
+              <p class="font-serif text-2xl font-bold text-white">Sign up to the waitlist.</p>
               <form id="wl-form" class="mt-4 space-y-4" novalidate>
-                <div class="flex items-center justify-center gap-3 text-sm font-semibold text-navy-900">
+                <div class="flex items-center justify-center gap-3 text-sm font-semibold text-white">
                   <label for="m-phone" class="cursor-pointer">Email</label>
                   <input class="ios-sw" type="checkbox" role="switch" id="m-phone" aria-label="Use phone number instead of email">
                   <label for="m-phone" class="cursor-pointer">Phone number</label>
                 </div>
                 <div>
-                  <label id="wl-label" for="wl-contact" class="text-sm font-semibold text-navy-900">Email address</label>
+                  <label id="wl-label" for="wl-contact" class="text-sm font-semibold text-white">Email address</label>
                   <input id="wl-contact" name="contact" type="email" autocomplete="email" inputmode="email" required placeholder="you@example.com" class="field mt-2" aria-describedby="wl-err">
-                  <p id="wl-err" class="mt-1.5 min-h-[1.25rem] text-sm font-medium text-red-700" role="alert"></p>
+                  <p id="wl-err" class="mt-1.5 min-h-[1.25rem] text-sm font-medium text-red-400" role="alert"></p>
                 </div>
                 <div class="absolute -left-[9999px]" aria-hidden="true"><label>Leave this empty <input type="text" name="website" id="wl-hp" tabindex="-1" autocomplete="off"></label></div>
-                <button type="submit" id="wl-btn" class="btn btn-primary w-full sm:w-auto">Sign up</button>
+                <button type="submit" id="wl-btn" class="btn btn-primary w-full">Sign up</button>
               </form>
               <div id="wl-success" tabindex="-1" role="status" class="hidden">
-                <p class="font-serif text-2xl font-semibold text-navy-900">Thank you. You're signed up.</p>
-                <p id="wl-demo" class="mt-3 hidden rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-900">Demo mode: no endpoint is configured, so nothing was sent. Set <code>WAITLIST_ENDPOINT</code> in the page script.</p>
+                <p class="font-serif text-3xl font-bold text-volt">Thank you. You're signed up.</p>
+                <p id="wl-demo" class="mt-3 hidden rounded-md bg-amber-100 px-3 py-2 text-xs text-amber-900">Demo mode: no endpoint is configured, so nothing was sent. Set <code>WAITLIST_ENDPOINT</code> in the page script.</p>
               </div>
             </div>
 
-            <div id="vote-stupid" tabindex="-1" role="status" class="mt-5 rounded-md border border-red-300 bg-red-50 p-4 font-medium leading-relaxed text-red-800" hidden>Thank you, I'll make sure to not build this just for you! If you never see this come to life, just know you were a part of that movement.</div>
-          </div>
+            <div id="vote-stupid" tabindex="-1" role="status" class="mt-7 rounded-2xl border border-red-400/60 bg-red-500/10 p-4 font-medium leading-relaxed text-red-200" hidden>Thank you, I'll make sure to not build this just for you! If you never see this come to life, just know you were a part of that movement.</div>
+          </div></div>
         </div>
-
       </div>
     </section>
 
+    <div class="marquee" aria-hidden="true"><div class="track">
+      <span>Identity-checked</span><span>Credit-rated AAA to CCC</span><span>Monthly repayments</span><span>Spread your risk</span><span>Home and abroad</span><span>You lend, they repay</span>
+      <span>Identity-checked</span><span>Credit-rated AAA to CCC</span><span>Monthly repayments</span><span>Spread your risk</span><span>Home and abroad</span><span>You lend, they repay</span>
+    </div></div>
+
     <!-- ============ HOW IT WORKS ============ -->
-    <section id="how" class="section bg-paper" aria-labelledby="how-h">
+    <section id="how" class="section" aria-labelledby="how-h">
       <div class="container-x">
-        <div class="mx-auto max-w-2xl text-center">
+        <div class="mx-auto max-w-3xl text-center rv">
           <p class="eyebrow">How it works</p>
-          <h2 id="how-h" class="h2 mt-3">Four steps from deposit to interest.</h2>
+          <h2 id="how-h" class="h2 mt-4">Four steps from deposit to interest.</h2>
         </div>
 
-        <ol class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <li class="rounded-lg border border-line bg-white p-6">
-            <span class="font-serif text-3xl font-semibold text-navy-700" aria-hidden="true">1</span>
-            <h3 class="mt-3 text-lg font-semibold text-navy-900"><span class="sr-only">Step 1: </span>Open an account</h3>
-            <p class="mt-2 text-slate-600">Verify your identity. Every lender and borrower is identity-checked before any loan is made.</p>
+        <ol class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <li class="step rv">
+            <span class="num" aria-hidden="true">1</span>
+            <h3 class="font-serif text-2xl font-bold text-white"><span class="sr-only">Step 1: </span>Open an account</h3>
+            <p class="mt-3 text-slate-300">Verify your identity. Every lender and borrower is identity-checked before any loan is made.</p>
           </li>
-          <li class="rounded-lg border border-line bg-white p-6">
-            <span class="font-serif text-3xl font-semibold text-navy-700" aria-hidden="true">2</span>
-            <h3 class="mt-3 text-lg font-semibold text-navy-900"><span class="sr-only">Step 2: </span>Choose your loans</h3>
-            <p class="mt-2 text-slate-600">Each loan is credit-rated from AAA to CCC and shows its interest rate and term. Pick loans yourself, or set your rules and let the platform invest for you.</p>
+          <li class="step rv" style="--d:.1s">
+            <span class="num" aria-hidden="true">2</span>
+            <h3 class="font-serif text-2xl font-bold text-white"><span class="sr-only">Step 2: </span>Choose your loans</h3>
+            <p class="mt-3 text-slate-300">Each loan is credit-rated from AAA to CCC and shows its interest rate and term. Pick loans yourself, or set your rules and let the platform invest for you.</p>
           </li>
-          <li class="rounded-lg border border-line bg-white p-6">
-            <span class="font-serif text-3xl font-semibold text-navy-700" aria-hidden="true">3</span>
-            <h3 class="mt-3 text-lg font-semibold text-navy-900"><span class="sr-only">Step 3: </span>Borrowers repay</h3>
-            <p class="mt-2 text-slate-600">Borrowers repay in monthly instalments. You can spread your money across many loans instead of relying on one borrower.</p>
+          <li class="step rv" style="--d:.2s">
+            <span class="num" aria-hidden="true">3</span>
+            <h3 class="font-serif text-2xl font-bold text-white"><span class="sr-only">Step 3: </span>Borrowers repay</h3>
+            <p class="mt-3 text-slate-300">Borrowers repay in monthly instalments. You can spread your money across many loans instead of relying on one borrower.</p>
           </li>
-          <li class="rounded-lg border border-line bg-white p-6">
-            <span class="font-serif text-3xl font-semibold text-navy-700" aria-hidden="true">4</span>
-            <h3 class="mt-3 text-lg font-semibold text-navy-900"><span class="sr-only">Step 4: </span>You earn interest</h3>
-            <p class="mt-2 text-slate-600">Interest and principal reach your account every month. Reinvest it, or withdraw what has been repaid.</p>
+          <li class="step rv" style="--d:.3s">
+            <span class="num" aria-hidden="true">4</span>
+            <h3 class="font-serif text-2xl font-bold text-white"><span class="sr-only">Step 4: </span>You earn interest</h3>
+            <p class="mt-3 text-slate-300">Interest and principal reach your account every month. Reinvest it, or withdraw what has been repaid.</p>
           </li>
         </ol>
 
-        <p class="mx-auto mt-8 max-w-3xl text-center text-slate-600"><strong class="font-semibold text-navy-900">How the rate is set.</strong> Two things decide the interest rate on a loan: the borrower's credit rating and the length of the loan. Higher risk or a longer loan pays more. Every rate is shown as an annual percentage, so you can compare it with other investments.</p>
+        <div class="glass rv mx-auto mt-14 max-w-4xl p-7 sm:p-10">
+          <div class="flex items-center justify-between font-serif text-sm font-bold uppercase tracking-widest text-white" aria-hidden="true"><span>AAA</span><span>CCC</span></div>
+          <div class="scale mt-3" aria-hidden="true"></div>
+          <p class="mt-7 text-lg leading-relaxed text-slate-300"><strong class="font-semibold text-white">How the rate is set.</strong> Two things decide the interest rate on a loan: the borrower's credit rating and the length of the loan. Higher risk or a longer loan pays more. Every rate is shown as an annual percentage, so you can compare it with other investments.</p>
+        </div>
 
-        <div class="mt-8 rounded-lg border border-navy-900 bg-white p-6">
-          <h3 class="font-serif text-xl font-semibold text-navy-900">Lending carries risk.</h3>
-          <p class="mt-2 text-slate-700">Borrowers can miss payments, and you can lose some or all of the money you lend. Credital is not a bank, and money lent through it is not a deposit.</p>
+        <div class="rv mx-auto mt-6 max-w-4xl rounded-3xl border border-volt/60 bg-volt/5 p-7 sm:p-10">
+          <h3 class="font-serif text-2xl font-bold text-volt">Lending carries risk.</h3>
+          <p class="mt-3 text-slate-200">Borrowers can miss payments, and you can lose some or all of the money you lend. Credital is not a bank, and money lent through it is not a deposit.</p>
         </div>
       </div>
     </section>
 
     <!-- ============ TALK TO US ============ -->
-    <section id="talk" class="on-dark section bg-navy-900" aria-labelledby="talk-h">
+    <section id="talk" class="call bg-navy-900 section" aria-labelledby="talk-h">
       <div class="container-x">
-        <div class="mx-auto max-w-2xl text-center">
-          <p class="text-sm font-semibold uppercase tracking-wider text-white/70">Talk to us</p>
-          <h2 id="talk-h" class="mt-3 font-serif text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl">Want to understand how it works? Call us.</h2>
-          <p class="mt-5 text-lg leading-relaxed text-white/80">If this has made you curious, we're happy to talk it through with you, in plain terms and at your pace. Call any time, with any question.</p>
-          <p class="mt-8">
-            <a href="tel:+393208189855" class="font-serif text-3xl font-semibold tracking-tight text-white underline decoration-white/40 underline-offset-8 hover:decoration-white sm:text-5xl">+39 320 818 9855</a>
-          </p>
+        <div class="rv mx-auto max-w-4xl text-center">
+          <p class="eyebrow">Talk to us</p>
+          <h2 id="talk-h" class="h2 mt-4">Want to understand how it works? Call us.</h2>
+          <p class="lead mx-auto mt-6 max-w-2xl">If this has made you curious, we're happy to talk it through with you, in plain terms and at your pace. Call any time, with any question.</p>
+          <p class="mt-12"><a href="tel:+393208189855" class="phone-link">+39 320 818 9855</a></p>
         </div>
-      </div>
-    </section>
-
-    <!-- ============ EXAMPLE LOAN ============ -->
-    <section id="example" class="section bg-white" aria-label="Example loan">
-      <div class="container-x">
-        <figure class="mx-auto max-w-md">
-          <div class="rounded-lg border border-line bg-white p-6 shadow-soft">
-            <div class="flex items-center justify-between gap-3">
-              <p class="text-sm font-semibold uppercase tracking-wider text-slate-600">Example loan</p>
-              <span class="rounded bg-navy-900 px-2.5 py-1 text-xs font-bold text-white">Rated BBB</span>
-            </div>
-            <dl class="mt-5 divide-y divide-line text-base">
-              <div class="flex justify-between gap-4 py-3"><dt class="text-slate-600">Amount lent</dt><dd class="font-semibold tabular-nums text-navy-900">$500</dd></div>
-              <div class="flex justify-between gap-4 py-3"><dt class="text-slate-600">Term</dt><dd class="font-semibold tabular-nums text-navy-900">12 months</dd></div>
-              <div class="flex justify-between gap-4 py-3"><dt class="text-slate-600">Annual interest rate</dt><dd class="font-semibold tabular-nums text-navy-900">12.0%</dd></div>
-              <div class="flex justify-between gap-4 py-3"><dt class="text-slate-600">Monthly repayment</dt><dd class="font-semibold tabular-nums text-navy-900">$44.42</dd></div>
-              <div class="flex justify-between gap-4 py-3"><dt class="font-semibold text-navy-900">Total interest earned</dt><dd class="text-lg font-bold tabular-nums text-navy-900">$33.04</dd></div>
-            </dl>
-          </div>
-          <figcaption class="mt-3 text-xs leading-relaxed text-slate-600">Illustration only, before fees and credit losses. Not a forecast. Capital at risk.</figcaption>
-        </figure>
       </div>
     </section>
   </main>
 
   <!-- ============ FOOTER ============ -->
-  <footer class="on-dark bg-navy-950 text-white/75">
-    <div class="container-x py-10 text-center">
+  <footer class="bg-navy-950 text-slate-400">
+    <div class="container-x py-12 text-center">
       <div class="flex items-center justify-center gap-2.5 text-white">
-        <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#fff"/><path d="M21.5 11.2A7.2 7.2 0 1 0 21.5 20.8" fill="none" stroke="#0B1F44" stroke-width="3.2" stroke-linecap="round"/></svg>
-        <span class="font-serif text-lg font-semibold tracking-tight">Credital</span>
+        <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#C8FF3D"/><path d="M21.5 11.2A7.2 7.2 0 1 0 21.5 20.8" fill="none" stroke="#07142E" stroke-width="3.2" stroke-linecap="round"/></svg>
+        <span class="font-serif text-lg font-bold tracking-tight">Credital</span>
       </div>
 
-      <div class="mt-6 text-xs leading-relaxed text-white/75" role="note" aria-label="Regulatory disclaimer">
+      <div class="mt-6 text-xs leading-relaxed" role="note" aria-label="Regulatory disclaimer">
         <p><strong class="text-white">Capital at risk.</strong> Lending through Credital carries risk. You may lose some or all of the money you lend, and illustrative or past returns are not a reliable guide to future results. Credital is not a bank. Money lent through Credital is not a bank deposit and is not covered by any deposit guarantee scheme (such as the FDIC, FSCS or an equivalent).</p>
         <p class="mt-3">Credital's services are subject to local laws and regulation and may not be available in all countries or to all persons. All rates, fees and examples on this page are illustrative and for information only. They are not an offer, a quote or a forecast, and are not investment, tax or legal advice. Credit ratings shown are Credital's own internal ratings, not ratings from a credit rating agency.</p>
-        <p class="mt-3 text-white/65">[Placeholder: legal entity name, company registration number, registered address, and regulator and licence details.]</p>
+        <p class="mt-3 text-slate-500">[Placeholder: legal entity name, company registration number, registered address, and regulator and licence details.]</p>
       </div>
-      <p class="mt-6 text-xs text-white/65">&copy; 2026 Credital. All rights reserved.</p>
+      <p class="mt-6 text-xs text-slate-500">&copy; 2026 Credital. All rights reserved.</p>
     </div>
   </footer>
 
-  <script>
+<script>
   (function () {
     'use strict';
 
@@ -261,6 +310,7 @@
     var rng = $('vote-range'), hint = $('vote-hint'), coolBox = $('vote-cool'), stupidBox = $('vote-stupid');
     var form = $('wl-form'), contact = $('wl-contact'), label = $('wl-label'), err = $('wl-err'), btn = $('wl-btn'), ok = $('wl-success');
     var voted = null;
+    var lbCool = $('lb-cool'), lbStupid = $('lb-stupid');
 
     function post(payload) {
       if (!WAITLIST_ENDPOINT) return Promise.resolve();
@@ -276,6 +326,10 @@
       rng.dataset.side = side;
       rng.setAttribute('aria-valuetext', side === 'cool' ? 'Cool' : 'Stupid');
       hint.textContent = 'Thanks for your vote. Flip it any time to change it.';
+      document.body.classList.toggle('is-stupid', side === 'stupid');
+      lbCool.classList.toggle('on', side === 'cool'); lbCool.classList.toggle('dim', side !== 'cool');
+      lbStupid.classList.toggle('on', side === 'stupid'); lbStupid.classList.toggle('dim', side !== 'stupid');
+      if (!quiet) { var b = side === 'cool' ? coolBox : stupidBox; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); }
       var box = side === 'cool' ? coolBox : stupidBox;
       coolBox.hidden = side !== 'cool';
       stupidBox.hidden = side !== 'stupid';
@@ -288,6 +342,7 @@
       if (side === voted) return;
       var first = !voted;
       show(side, first ? false : true);
+      burst(side);
       store('credital-vote', side);
       if (!WAITLIST_ENDPOINT && !isLocal && window.console) console.warn('WAITLIST_ENDPOINT is empty: this vote was not recorded.');
       post({ type: 'vote', vote: side, replaces: first ? null : (side === 'cool' ? 'stupid' : 'cool'), source: location.href, ts: new Date().toISOString() }).catch(function () {});
@@ -358,6 +413,43 @@
           err.textContent = 'Something went wrong. Please try again.';
         });
     });
+
+
+    // Confetti on cool, a shake on stupid (skipped for reduced motion)
+    var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var cv = $('fx'), cx = cv.getContext('2d'), bits = [], raf = 0;
+    function fit() { cv.width = innerWidth; cv.height = innerHeight; }
+    fit(); addEventListener('resize', fit);
+    function tick() {
+      cx.clearRect(0, 0, cv.width, cv.height);
+      bits = bits.filter(function (p) { return p.y < cv.height + 20 && p.life > 0; });
+      bits.forEach(function (p) {
+        p.vy += .22; p.x += p.vx; p.y += p.vy; p.r += p.vr; p.life--;
+        cx.save(); cx.translate(p.x, p.y); cx.rotate(p.r); cx.fillStyle = p.c; cx.fillRect(-p.s / 2, -p.s / 3, p.s, p.s * .6); cx.restore();
+      });
+      raf = bits.length ? requestAnimationFrame(tick) : 0;
+    }
+    function burst(side) {
+      if (still) return;
+      if (side === 'stupid') { var card = document.querySelector('.vote-card'); card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake'); return; }
+      var r = rng.getBoundingClientRect(), ox = r.left + r.width / 2, oy = r.top + r.height / 2;
+      var cols = ['#C8FF3D', '#7DF9FF', '#7C83FF', '#FFFFFF'];
+      for (var i = 0; i < 110; i++) {
+        var a = Math.random() * Math.PI * 2, sp = 4 + Math.random() * 9;
+        bits.push({ x: ox, y: oy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 6, r: Math.random() * 6, vr: (Math.random() - .5) * .4, s: 6 + Math.random() * 8, c: cols[i % 4], life: 140 });
+      }
+      if (!raf) raf = requestAnimationFrame(tick);
+    }
+
+    // Scroll reveals and the hero spotlight
+    document.documentElement.classList.add('js');
+    var rv = document.querySelectorAll('.rv');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: .12 });
+      rv.forEach(function (el) { io.observe(el); });
+    } else { rv.forEach(function (el) { el.classList.add('in'); }); }
+    var hero = document.getElementById('top');
+    hero.addEventListener('pointermove', function (e) { var b = hero.getBoundingClientRect(); hero.style.setProperty('--mx', (e.clientX - b.left) + 'px'); hero.style.setProperty('--my', (e.clientY - b.top) + 'px'); });
 
     // Returning visitor: restore their vote (one vote per browser)
     var prev = read('credital-vote');

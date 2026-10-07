@@ -269,27 +269,39 @@
       rng.value = side === 'cool' ? 0 : 100;
       rng.dataset.side = side;
       rng.setAttribute('aria-valuetext', side === 'cool' ? 'Cool' : 'Stupid');
-      rng.disabled = true;
-      hint.textContent = 'Thanks for your vote.';
+      hint.textContent = 'Thanks for your vote. Flip it any time to change it.';
       var box = side === 'cool' ? coolBox : stupidBox;
       coolBox.hidden = side !== 'cool';
       stupidBox.hidden = side !== 'stupid';
       if (!quiet) box.focus();
     }
 
+    // The switch stays live: each visitor's current position is their vote.
+    var moved = false;
+    function cast(side) {
+      if (side === voted) return;
+      var first = !voted;
+      show(side, first ? false : true);
+      store('credital-vote', side);
+      if (!WAITLIST_ENDPOINT && !isLocal && window.console) console.warn('WAITLIST_ENDPOINT is empty: this vote was not recorded.');
+      post({ type: 'vote', vote: side, replaces: first ? null : (side === 'cool' ? 'stupid' : 'cool'), source: location.href, ts: new Date().toISOString() }).catch(function () {});
+    }
+    rng.addEventListener('pointerdown', function () { moved = false; });
     rng.addEventListener('input', function () {
+      moved = true;
       var v = +rng.value;
       rng.setAttribute('aria-valuetext', v < 45 ? 'Leaning cool' : v > 55 ? 'Leaning stupid' : 'Undecided');
-      rng.dataset.side = v < 50 ? 'cool' : v > 50 ? 'stupid' : '';
+      rng.dataset.side = v < 50 ? 'cool' : v > 50 ? 'stupid' : (voted || '');
     });
     rng.addEventListener('change', function () {
       var v = +rng.value;
-      if (voted || v === 50) return;
-      var side = v < 50 ? 'cool' : 'stupid';
-      show(side);
-      store('credital-vote', side);
-      if (!WAITLIST_ENDPOINT && !isLocal && window.console) console.warn('WAITLIST_ENDPOINT is empty: this vote was not recorded.');
-      post({ type: 'vote', vote: side, source: location.href, ts: new Date().toISOString() }).catch(function () {});
+      if (v === 50) { if (voted) show(voted, true); return; }
+      cast(v < 50 ? 'cool' : 'stupid');
+    });
+    // A plain tap on the knob or the same half flips the switch, like iOS
+    rng.addEventListener('click', function () {
+      if (voted && !moved) cast(voted === 'cool' ? 'stupid' : 'cool');
+      moved = false;
     });
 
     // Email by default, switchable to phone

@@ -68,15 +68,20 @@
     .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; background: #fff; color: #0B1F44; padding: .75rem 1.25rem; border-radius: .375rem; font-weight: 600; }
     .skip-link:focus { top: 1rem; }
     .peer:focus-visible + label { outline: 3px solid var(--focus); outline-offset: 2px; }
-    input[type=range].vote-rng { -webkit-appearance: none; appearance: none; width: 100%; height: 36px; background: transparent; cursor: pointer; }
-    .vote-rng::-webkit-slider-runnable-track { height: 8px; border-radius: 999px; background: linear-gradient(to right, #1D3F77, #B91C1C); }
-    .vote-rng::-moz-range-track { height: 8px; border-radius: 999px; background: linear-gradient(to right, #1D3F77, #B91C1C); }
-    .vote-rng::-webkit-slider-thumb { -webkit-appearance: none; margin-top: -10px; width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 4px solid #0B1F44; box-shadow: 0 1px 5px rgba(11,31,68,.35); }
-    .vote-rng::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #fff; border: 4px solid #0B1F44; box-shadow: 0 1px 5px rgba(11,31,68,.35); }
-    .vote-rng:focus-visible { outline: none; }
-    .vote-rng:focus-visible::-webkit-slider-thumb { outline: 3px solid #1D3F77; outline-offset: 3px; }
-    .vote-rng:focus-visible::-moz-range-thumb { outline: 3px solid #1D3F77; outline-offset: 3px; }
-    .vote-rng:disabled { cursor: default; opacity: .7; }
+    /* iOS-style switch. Undecided = grey, knob centred; Cool = navy, knob left; Stupid = red, knob right. */
+    input[type=range].vote-rng { -webkit-appearance: none; appearance: none; display: block; width: 51px; height: 31px; margin: 0; padding: 0; background: #E5E5EA; cursor: pointer; border-radius: 999px; transition: background-color .25s; }
+    input[type=range].vote-rng[data-side=cool] { background: #0B1F44; }
+    input[type=range].vote-rng[data-side=stupid] { background: #B91C1C; }
+    .vote-rng::-webkit-slider-runnable-track { height: 31px; border-radius: 999px; background: transparent; }
+    .vote-rng::-moz-range-track { height: 31px; border-radius: 999px; background: transparent; }
+    .vote-rng::-webkit-slider-thumb { -webkit-appearance: none; width: 31px; height: 31px; border-radius: 50%; border: 2px solid transparent; background: #fff padding-box; box-shadow: 0 3px 8px rgba(0,0,0,.15), 0 3px 1px rgba(0,0,0,.06); }
+    .vote-rng::-moz-range-thumb { box-sizing: border-box; width: 31px; height: 31px; border-radius: 50%; border: 2px solid transparent; background: #fff padding-box; box-shadow: 0 3px 8px rgba(0,0,0,.15), 0 3px 1px rgba(0,0,0,.06); }
+    .vote-rng:focus-visible { outline: 3px solid #1D3F77; outline-offset: 3px; }
+    /* Email / phone switch */
+    .ios-sw { appearance: none; -webkit-appearance: none; position: relative; flex: none; width: 51px; height: 31px; margin: 0; border-radius: 999px; background: #0B1F44; cursor: pointer; transition: background .25s; }
+    .ios-sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,.15), 0 3px 1px rgba(0,0,0,.06); transition: transform .25s; }
+    .ios-sw:checked::after { transform: translateX(20px); }
+    .vote-rng:disabled { cursor: default; }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { transition: none !important; animation: none !important; }
@@ -113,20 +118,17 @@
           <p class="lead mt-5 max-w-xl">Credital connects people who have money to lend with people who need a loan, at home and abroad. You lend. Borrowers repay you with interest.</p>
           <div id="vote" class="mt-9 max-w-xl rounded-lg border border-line bg-paper p-5 sm:p-6">
             <label for="vote-range" class="font-serif text-2xl font-semibold text-navy-900">Cool or stupid?</label>
-            <p id="vote-hint" class="mt-1 text-sm text-slate-600">Slide to one side, then let go.</p>
-            <input id="vote-range" class="vote-rng mt-4" type="range" min="0" max="100" step="1" value="50" aria-describedby="vote-hint" aria-valuetext="Undecided">
-            <div class="mt-1 flex justify-between text-sm font-semibold text-navy-900" aria-hidden="true"><span>Cool</span><span>Stupid</span></div>
+            <p id="vote-hint" class="mt-1 text-sm text-slate-600">Flip the switch one way or the other.</p>
+            <div class="mt-4 flex items-center gap-3 text-base font-semibold text-navy-900"><span aria-hidden="true">Cool</span><input id="vote-range" class="vote-rng" type="range" min="0" max="100" step="1" value="50" aria-describedby="vote-hint" aria-valuetext="Undecided"><span aria-hidden="true">Stupid</span></div>
 
             <div id="vote-cool" tabindex="-1" class="mt-5 border-t border-line pt-5" hidden>
               <p class="font-serif text-xl font-semibold text-navy-900">Sign up to the waitlist.</p>
               <form id="wl-form" class="mt-4 space-y-4" novalidate>
-                <fieldset>
-                  <legend class="sr-only">How should we reach you?</legend>
-                  <div class="inline-flex rounded-md border border-slate-500 bg-white p-0.5">
-                    <div><input class="peer sr-only" type="radio" name="method" id="m-email" value="email" checked><label for="m-email" class="block cursor-pointer rounded px-4 py-2 text-sm font-semibold text-navy-900 peer-checked:bg-navy-900 peer-checked:text-white">Email</label></div>
-                    <div><input class="peer sr-only" type="radio" name="method" id="m-phone" value="phone"><label for="m-phone" class="block cursor-pointer rounded px-4 py-2 text-sm font-semibold text-navy-900 peer-checked:bg-navy-900 peer-checked:text-white">Phone number</label></div>
-                  </div>
-                </fieldset>
+                <div class="flex items-center gap-3 text-sm font-semibold text-navy-900">
+                  <label for="m-phone" class="cursor-pointer">Email</label>
+                  <input class="ios-sw" type="checkbox" role="switch" id="m-phone" aria-label="Use phone number instead of email">
+                  <label for="m-phone" class="cursor-pointer">Phone number</label>
+                </div>
                 <div>
                   <label id="wl-label" for="wl-contact" class="text-sm font-semibold text-navy-900">Email address</label>
                   <input id="wl-contact" name="contact" type="email" autocomplete="email" inputmode="email" required placeholder="you@example.com" class="field mt-2" aria-describedby="wl-err">
@@ -265,6 +267,7 @@
     function show(side, quiet) {
       voted = side;
       rng.value = side === 'cool' ? 0 : 100;
+      rng.dataset.side = side;
       rng.setAttribute('aria-valuetext', side === 'cool' ? 'Cool' : 'Stupid');
       rng.disabled = true;
       hint.textContent = 'Thanks for your vote.';
@@ -277,6 +280,7 @@
     rng.addEventListener('input', function () {
       var v = +rng.value;
       rng.setAttribute('aria-valuetext', v < 45 ? 'Leaning cool' : v > 55 ? 'Leaning stupid' : 'Undecided');
+      rng.dataset.side = v < 50 ? 'cool' : v > 50 ? 'stupid' : '';
     });
     rng.addEventListener('change', function () {
       var v = +rng.value;
@@ -298,15 +302,14 @@
       contact.placeholder = phone ? '+39 320 000 0000' : 'you@example.com';
       contact.value = ''; err.textContent = ''; contact.removeAttribute('aria-invalid');
     }
-    Array.prototype.forEach.call(document.querySelectorAll('input[name="method"]'), function (r) {
-      r.addEventListener('change', function () { if (r.checked) setMethod(r.value); });
-    });
+    var methodSw = $('m-phone');
+    methodSw.addEventListener('change', function () { setMethod(methodSw.checked ? 'phone' : 'email'); });
     contact.addEventListener('input', function () { if (err.textContent) { err.textContent = ''; contact.removeAttribute('aria-invalid'); } });
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if ($('wl-hp').value) return;                                  // honeypot
-      var method = document.querySelector('input[name="method"]:checked').value;
+      var method = (methodSw.checked ? 'phone' : 'email');
       var v = contact.value.trim();
       var valid = method === 'phone'
         ? /^\+?\d{7,15}$/.test(v.replace(/[\s\-().]/g, ''))

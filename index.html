@@ -67,6 +67,16 @@
     [hidden] { display: none !important; }
     .skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; background: #fff; color: #0B1F44; padding: .75rem 1.25rem; border-radius: .375rem; font-weight: 600; }
     .skip-link:focus { top: 1rem; }
+    .peer:focus-visible + label { outline: 3px solid var(--focus); outline-offset: 2px; }
+    input[type=range].vote-rng { -webkit-appearance: none; appearance: none; width: 100%; height: 36px; background: transparent; cursor: pointer; }
+    .vote-rng::-webkit-slider-runnable-track { height: 8px; border-radius: 999px; background: linear-gradient(to right, #1D3F77, #B91C1C); }
+    .vote-rng::-moz-range-track { height: 8px; border-radius: 999px; background: linear-gradient(to right, #1D3F77, #B91C1C); }
+    .vote-rng::-webkit-slider-thumb { -webkit-appearance: none; margin-top: -10px; width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 4px solid #0B1F44; box-shadow: 0 1px 5px rgba(11,31,68,.35); }
+    .vote-rng::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #fff; border: 4px solid #0B1F44; box-shadow: 0 1px 5px rgba(11,31,68,.35); }
+    .vote-rng:focus-visible { outline: none; }
+    .vote-rng:focus-visible::-webkit-slider-thumb { outline: 3px solid #1D3F77; outline-offset: 3px; }
+    .vote-rng:focus-visible::-moz-range-thumb { outline: 3px solid #1D3F77; outline-offset: 3px; }
+    .vote-rng:disabled { cursor: default; opacity: .7; }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { transition: none !important; animation: none !important; }
@@ -87,7 +97,7 @@
       <nav aria-label="Primary" class="flex items-center gap-5 text-sm font-medium">
         <a class="hidden text-slate-700 hover:text-navy-900 sm:inline" href="#how">How it works</a>
         <a class="hidden text-slate-700 hover:text-navy-900 sm:inline" href="#talk">Talk to us</a>
-        <a href="#waitlist" class="btn btn-primary !px-4 !py-2.5 text-sm">Join the waitlist</a>
+        <a href="#vote" class="btn btn-primary !px-4 !py-2.5 text-sm">Cool or stupid?</a>
       </nav>
     </div>
   </header>
@@ -101,9 +111,37 @@
           <p class="eyebrow">Lending marketplace</p>
           <h1 id="hero-h" class="mt-4 font-serif text-4xl font-semibold leading-[1.1] tracking-tight text-navy-900 sm:text-5xl">Earn interest by lending to verified borrowers.</h1>
           <p class="lead mt-5 max-w-xl">Credital connects people who have money to lend with people who need a loan, at home and abroad. You lend. Borrowers repay you with interest.</p>
-          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a href="#waitlist" class="btn btn-primary">Join the waitlist</a>
-            <a href="#talk" class="btn btn-outline">Talk to us</a>
+          <div id="vote" class="mt-9 max-w-xl rounded-lg border border-line bg-paper p-5 sm:p-6">
+            <label for="vote-range" class="font-serif text-2xl font-semibold text-navy-900">Cool or stupid?</label>
+            <p id="vote-hint" class="mt-1 text-sm text-slate-600">Slide to one side, then let go.</p>
+            <input id="vote-range" class="vote-rng mt-4" type="range" min="0" max="100" step="1" value="50" aria-describedby="vote-hint" aria-valuetext="Undecided">
+            <div class="mt-1 flex justify-between text-sm font-semibold text-navy-900" aria-hidden="true"><span>Cool</span><span>Stupid</span></div>
+
+            <div id="vote-cool" tabindex="-1" class="mt-5 border-t border-line pt-5" hidden>
+              <p class="font-serif text-xl font-semibold text-navy-900">Sign up to the waitlist.</p>
+              <form id="wl-form" class="mt-4 space-y-4" novalidate>
+                <fieldset>
+                  <legend class="sr-only">How should we reach you?</legend>
+                  <div class="inline-flex rounded-md border border-slate-500 bg-white p-0.5">
+                    <div><input class="peer sr-only" type="radio" name="method" id="m-email" value="email" checked><label for="m-email" class="block cursor-pointer rounded px-4 py-2 text-sm font-semibold text-navy-900 peer-checked:bg-navy-900 peer-checked:text-white">Email</label></div>
+                    <div><input class="peer sr-only" type="radio" name="method" id="m-phone" value="phone"><label for="m-phone" class="block cursor-pointer rounded px-4 py-2 text-sm font-semibold text-navy-900 peer-checked:bg-navy-900 peer-checked:text-white">Phone number</label></div>
+                  </div>
+                </fieldset>
+                <div>
+                  <label id="wl-label" for="wl-contact" class="text-sm font-semibold text-navy-900">Email address</label>
+                  <input id="wl-contact" name="contact" type="email" autocomplete="email" inputmode="email" required placeholder="you@example.com" class="field mt-2" aria-describedby="wl-err">
+                  <p id="wl-err" class="mt-1.5 min-h-[1.25rem] text-sm font-medium text-red-700" role="alert"></p>
+                </div>
+                <div class="absolute -left-[9999px]" aria-hidden="true"><label>Leave this empty <input type="text" name="website" id="wl-hp" tabindex="-1" autocomplete="off"></label></div>
+                <button type="submit" id="wl-btn" class="btn btn-primary w-full sm:w-auto">Sign up</button>
+              </form>
+              <div id="wl-success" tabindex="-1" role="status" class="hidden">
+                <p class="font-serif text-2xl font-semibold text-navy-900">Thank you. You're signed up.</p>
+                <p id="wl-demo" class="mt-3 hidden rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-900">Demo mode: no endpoint is configured, so nothing was sent. Set <code>WAITLIST_ENDPOINT</code> in the page script.</p>
+              </div>
+            </div>
+
+            <div id="vote-stupid" tabindex="-1" role="status" class="mt-5 rounded-md border border-red-300 bg-red-50 p-4 font-medium leading-relaxed text-red-800" hidden>Thank you, I'll make sure to not build this just for you! If you never see this come to life, just know you were a part of that movement.</div>
           </div>
         </div>
 
@@ -166,35 +204,6 @@
       </div>
     </section>
 
-    <!-- ============ WAITLIST ============ -->
-    <section id="waitlist" class="section bg-white" aria-labelledby="waitlist-h">
-      <div class="container-x grid grid-cols-1 items-center gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16">
-        <div>
-          <p class="eyebrow">Waitlist</p>
-          <h2 id="waitlist-h" class="h2 mt-3">Sign up if you find this interesting.</h2>
-        </div>
-
-        <div class="rounded-lg border border-line bg-paper p-6 sm:p-8">
-          <div id="wl-formwrap">
-            <form id="wl-form" class="space-y-4" novalidate>
-              <div>
-                <label for="wl-email" class="text-sm font-semibold text-navy-900">Email address</label>
-                <input id="wl-email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder="you@example.com" class="field mt-2" aria-describedby="wl-err">
-                <p id="wl-err" class="mt-1.5 min-h-[1.25rem] text-sm font-medium text-red-700" role="alert"></p>
-              </div>
-              <div class="absolute -left-[9999px]" aria-hidden="true"><label>Leave this empty <input type="text" name="website" id="wl-hp" tabindex="-1" autocomplete="off"></label></div>
-              <button type="submit" id="wl-btn" class="btn btn-primary w-full">Sign up</button>
-              <p class="text-xs leading-relaxed text-slate-600">Signing up is not an investment and does not commit you to anything.</p>
-            </form>
-          </div>
-          <div id="wl-success" tabindex="-1" role="status" class="hidden">
-            <h3 class="font-serif text-2xl font-semibold text-navy-900">Thank you. You're signed up.</h3>
-            <p id="wl-demo" class="mt-4 hidden rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-900">Demo mode: no waitlist endpoint is configured, so nothing was sent. Set <code>WAITLIST_ENDPOINT</code> in the page script.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ============ TALK TO US ============ -->
     <section id="talk" class="on-dark section bg-navy-900" aria-labelledby="talk-h">
       <div class="container-x">
@@ -231,50 +240,110 @@
   (function () {
     'use strict';
 
-    /* Set WAITLIST_ENDPOINT to a URL that accepts a JSON POST ({ email, source, ts })
-       (Formspree, Loops, a Google Apps Script web app, your own API...).
-       While it is empty, only local previews show the demo success state;
-       on a public host the form says the waitlist isn't open yet. */
+    /* Set WAITLIST_ENDPOINT to a URL that accepts a JSON POST (Formspree, Loops, a Google Apps Script
+       web app, your own API...). It receives two kinds of message, told apart by "type":
+         { type: 'vote',   vote: 'cool' | 'stupid', source, ts }
+         { type: 'signup', method: 'email' | 'phone', contact, vote: 'cool', source, ts }
+       The cool/stupid ratio is the count of each "vote" value. While the endpoint is empty, only local previews
+       show demo states; on a public host votes are not recorded and sign-up says it isn't open yet. */
     var WAITLIST_ENDPOINT = '';
 
-    var form = document.getElementById('wl-form'), email = document.getElementById('wl-email');
-    var err = document.getElementById('wl-err'), btn = document.getElementById('wl-btn');
-    var wrap = document.getElementById('wl-formwrap'), ok = document.getElementById('wl-success');
+    var isLocal = /^(localhost|127\.0\.0\.1|\[::1\])?$/.test(location.hostname);
+    var $ = function (id) { return document.getElementById(id); };
+    var rng = $('vote-range'), hint = $('vote-hint'), coolBox = $('vote-cool'), stupidBox = $('vote-stupid');
+    var form = $('wl-form'), contact = $('wl-contact'), label = $('wl-label'), err = $('wl-err'), btn = $('wl-btn'), ok = $('wl-success');
+    var voted = null;
+
+    function post(payload) {
+      if (!WAITLIST_ENDPOINT) return Promise.resolve();
+      return fetch(WAITLIST_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload) })
+        .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); });
+    }
+    function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+    function show(side, quiet) {
+      voted = side;
+      rng.value = side === 'cool' ? 0 : 100;
+      rng.setAttribute('aria-valuetext', side === 'cool' ? 'Cool' : 'Stupid');
+      rng.disabled = true;
+      hint.textContent = 'Thanks for your vote.';
+      var box = side === 'cool' ? coolBox : stupidBox;
+      coolBox.hidden = side !== 'cool';
+      stupidBox.hidden = side !== 'stupid';
+      if (!quiet) box.focus();
+    }
+
+    rng.addEventListener('input', function () {
+      var v = +rng.value;
+      rng.setAttribute('aria-valuetext', v < 45 ? 'Leaning cool' : v > 55 ? 'Leaning stupid' : 'Undecided');
+    });
+    rng.addEventListener('change', function () {
+      var v = +rng.value;
+      if (voted || v === 50) return;
+      var side = v < 50 ? 'cool' : 'stupid';
+      show(side);
+      store('credital-vote', side);
+      if (!WAITLIST_ENDPOINT && !isLocal && window.console) console.warn('WAITLIST_ENDPOINT is empty: this vote was not recorded.');
+      post({ type: 'vote', vote: side, source: location.href, ts: new Date().toISOString() }).catch(function () {});
+    });
+
+    // Email by default, switchable to phone
+    function setMethod(m) {
+      var phone = m === 'phone';
+      label.textContent = phone ? 'Phone number' : 'Email address';
+      contact.type = phone ? 'tel' : 'email';
+      contact.setAttribute('autocomplete', phone ? 'tel' : 'email');
+      contact.setAttribute('inputmode', phone ? 'tel' : 'email');
+      contact.placeholder = phone ? '+39 320 000 0000' : 'you@example.com';
+      contact.value = ''; err.textContent = ''; contact.removeAttribute('aria-invalid');
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('input[name="method"]'), function (r) {
+      r.addEventListener('change', function () { if (r.checked) setMethod(r.value); });
+    });
+    contact.addEventListener('input', function () { if (err.textContent) { err.textContent = ''; contact.removeAttribute('aria-invalid'); } });
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      if (document.getElementById('wl-hp').value) return;           // honeypot
-      var v = email.value.trim();
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) {
-        err.textContent = 'Please enter a valid email address.';
-        email.setAttribute('aria-invalid', 'true');
-        email.focus();
+      if ($('wl-hp').value) return;                                  // honeypot
+      var method = document.querySelector('input[name="method"]:checked').value;
+      var v = contact.value.trim();
+      var valid = method === 'phone'
+        ? /^\+?\d{7,15}$/.test(v.replace(/[\s\-().]/g, ''))
+        : /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+      if (!valid) {
+        err.textContent = method === 'phone' ? 'Please enter a valid phone number, including the country code.' : 'Please enter a valid email address.';
+        contact.setAttribute('aria-invalid', 'true');
+        contact.focus();
         return;
       }
-      err.textContent = ''; email.removeAttribute('aria-invalid');
+      err.textContent = ''; contact.removeAttribute('aria-invalid');
       // Without an endpoint, only local previews (file://, localhost) may pretend to succeed.
-      // On a public host we refuse rather than tell visitors they're on a list that doesn't exist.
-      if (!WAITLIST_ENDPOINT && !/^(localhost|127\.0\.0\.1|\[::1\])?$/.test(location.hostname)) {
+      if (!WAITLIST_ENDPOINT && !isLocal) {
         err.textContent = 'The waitlist isn’t accepting sign-ups yet. Please check back soon.';
         return;
       }
       btn.disabled = true; btn.textContent = 'Signing up…';
-      var payload = { email: v, source: location.href, ts: new Date().toISOString() };
-      var send = WAITLIST_ENDPOINT
-        ? fetch(WAITLIST_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload) })
-            .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); })
-        : Promise.resolve();
-      send.then(function () {
-        wrap.classList.add('hidden');
-        ok.classList.remove('hidden');
-        if (!WAITLIST_ENDPOINT) document.getElementById('wl-demo').classList.remove('hidden');
-        ok.focus();
-      }).catch(function () {
-        btn.disabled = false; btn.textContent = 'Sign up';
-        err.textContent = 'Something went wrong. Please try again.';
-      });
+      post({ type: 'signup', method: method, contact: v, vote: 'cool', source: location.href, ts: new Date().toISOString() })
+        .then(function () {
+          form.classList.add('hidden');
+          ok.classList.remove('hidden');
+          if (!WAITLIST_ENDPOINT) $('wl-demo').classList.remove('hidden');
+          store('credital-signed', '1');
+          ok.focus();
+        })
+        .catch(function () {
+          btn.disabled = false; btn.textContent = 'Sign up';
+          err.textContent = 'Something went wrong. Please try again.';
+        });
     });
-    email.addEventListener('input', function () { if (err.textContent) { err.textContent = ''; email.removeAttribute('aria-invalid'); } });
+
+    // Returning visitor: restore their vote (one vote per browser)
+    var prev = read('credital-vote');
+    if (prev === 'cool' || prev === 'stupid') {
+      show(prev, true);
+      if (prev === 'cool' && read('credital-signed')) { form.classList.add('hidden'); ok.classList.remove('hidden'); }
+    }
   })();
   </script>
 </body>

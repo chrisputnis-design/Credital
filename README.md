@@ -1,7 +1,8 @@
 # Credital landing page
 
 Short, institutional landing page for Credital, a lending marketplace. One self-contained file, `index.html`
-(Tailwind + vanilla JS, no framework). Sections: hero with an example loan, how it works, waitlist, talk to us, risk disclaimer.
+(Tailwind + vanilla JS, no framework). Sections: hero with a "Cool or stupid?" slider and an example loan, how it works, talk to us, risk disclaimer.
+Sliding to cool reveals the waitlist sign-up (email or phone); sliding to stupid shows a thank-you message.
 
 ## Working on it
 
@@ -12,9 +13,11 @@ Short, institutional landing page for Credital, a lending marketplace. One self-
 
 ## Before it goes public
 
-1. **Waitlist:** set `WAITLIST_ENDPOINT` in the script at the bottom of `index.html` to a URL that accepts a JSON POST
-   `{ email, source, ts }` (Formspree, Loops, a Google Apps Script web app, your own API). Until you do, the form shows a demo
-   success only on `localhost`/`file://`; on a public host it says the waitlist isn't open yet.
+1. **Votes and sign-ups:** set `WAITLIST_ENDPOINT` in the script at the bottom of `index.html` to a URL that accepts a JSON POST
+   (Formspree, Loops, a Google Apps Script web app, your own API). It receives `{ type: 'vote', vote: 'cool' | 'stupid', ... }`
+   for every slider vote and `{ type: 'signup', method: 'email' | 'phone', contact, ... }` for every sign-up. The cool/stupid ratio is
+   the count of each `vote` value. One vote per browser (stored in localStorage, so it can be cleared). While the endpoint is empty,
+   votes are not recorded, and on a public host sign-up says the waitlist isn't open yet.
 2. **Legal review:** the page advertises interest to retail investors. Have the disclaimer and claims checked, and fill in the
    legal entity / regulator placeholder in the footer.
 3. **Example loan:** the hero numbers ($500, 12 months, 12.0%, $44.42 a month, $33.04 interest) are illustrative. Confirm the rating scale and rates before publishing.

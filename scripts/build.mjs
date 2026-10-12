@@ -55,7 +55,7 @@ rmSync(tmp, { recursive: true, force: true });
 if (out.includes('cdn.tailwindcss.com')) throw new Error('Build still references the Tailwind CDN');
 if (out.includes('text/tailwindcss')) throw new Error('Build still contains an uncompiled Tailwind style block');
 if (css.length < 10000) throw new Error('Compiled CSS looks too small (' + css.length + ' bytes)');
-if (!/\.bg-navy-900\b/.test(css)) throw new Error('Compiled CSS is missing expected utilities');
+if (!/\.bg-forest-900\b/.test(css)) throw new Error('Compiled CSS is missing expected utilities');
 
 const kb = (n) => (n / 1024).toFixed(1) + ' KB';
 console.log(`Built dist/index.html (${kb(Buffer.byteLength(out))}, CSS ${kb(css.length)})`);

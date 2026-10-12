@@ -1,7 +1,7 @@
 # Credital landing page
 
 Short, institutional landing page for Credital, a lending marketplace. One self-contained file, `index.html`
-(Tailwind + vanilla JS, no framework). Sections: hero with a "Cool or stupid?" slider and an example loan, how it works, talk to us, risk disclaimer.
+(Tailwind + vanilla JS, no framework). Sections: hero with a "Cool or stupid?" switch, how it works, talk to us, risk disclaimer.
 Sliding to cool reveals the waitlist sign-up (email or phone); sliding to stupid shows a thank-you message.
 
 ## Working on it

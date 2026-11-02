@@ -9,6 +9,7 @@ game-specific lives in `engine.py`; bots only see a `State` and return an `Actio
 ## Run
 
 ```bash
+python -m pokerbot.play [bot]                      # play against it yourself (f / c / r 6 / p / a / q)
 python -m pokerbot.match basic --vs all            # basic vs every builtin bot
 python -m pokerbot.match basic callstation --hands 20000
 python -m pokerbot.match my_bot.py:MyBot basic     # your own bot class from a file

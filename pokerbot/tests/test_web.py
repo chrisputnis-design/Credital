@@ -13,7 +13,7 @@ from pokerbot.evaluator import evaluate
 WEB = pathlib.Path(__file__).parent.parent / "web"
 
 JS = """
-const P = require(process.argv[2] + "/poker.js")(require(process.argv[2] + "/data.json"));
+const P = require(process.argv[1] + "/poker.js")(require(process.argv[1] + "/data.json"));
 const ref = JSON.parse(require("fs").readFileSync(0, "utf8"));
 let bad = 0;
 for (const [x, s] of ref.ev) if (P.evaluate(x) !== s) bad++;

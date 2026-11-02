@@ -12,6 +12,7 @@ game-specific lives in `engine.py`; bots only see a `State` and return an `Actio
 python -m pokerbot.match basic --vs all            # basic vs every builtin bot
 python -m pokerbot.match basic callstation --hands 20000
 python -m pokerbot.match my_bot.py:MyBot basic     # your own bot class from a file
+python -m pokerbot.tune --validate                # fresh-seed check of tuned vs original
 python -m unittest discover -s pokerbot/tests -t . # tests
 ```
 
@@ -47,10 +48,39 @@ class MyBot:
 
 ## BasicBot
 
-- Preflop: equity-vs-random table + pot odds; opens ~top 60% as SB, 3-bets strong hands.
-- Postflop: made-hand + draw strength estimate (no simulation, ~10 µs) + pot odds, some random bluffs.
-- Known weaknesses (= the to-do list): ignores board texture and bet size, no opponent
-  modelling, thresholds are guesses, hand strength is "vs random" not vs a betting range.
+- Preflop: equity-vs-random table + pot odds. Postflop: made-hand + draw strength estimate
+  (no simulation, ~10 µs) + pot odds, some random bluffs. All thresholds live in a params dict.
+- `tuned_params.py` holds thresholds hill-climbed by self-play (`python -m pokerbot.tune`).
+  `ORIGINAL_PARAMS` is the hand-guessed version, kept as the baseline (`basic0`).
+- Opponent model (`OpponentModel`, fed by `on_hand_end`): smoothed fold-to-bet, fold-to-open,
+  aggression. Only two adjustments are on by default, because they were the only ones that paid:
+  call lighter vs aggressive opponents (`margin`), bet thinner vs stations (`value`).
+  `bluff` (bluff more vs folders) and `open` (open wider vs folders) *lost* money when tested,
+  so they are opt-in: `BasicBot(adapt=("bluff",))`.
+
+Opponent presets for testing: `basic0`, `static` (tuned, no model), `tight`, `loose`,
+`callstation`, `maniac`, `random`, `folder`.
+
+### Measured (bb/100, duplicate, 20k–80k hands, fresh seeds; ± ≈ 5–25)
+
+| basic vs | result | note |
+|---|---|---|
+| basic0 (original) | +11 ± 7 | tuned+model vs hand-guessed; tuned params alone were +16 head-to-head |
+| static (no model) | −4 ± 5 | model is not a gain vs a same-strength opponent |
+| tight | −9 ± 6 | **loses slightly to the nit** |
+| loose | +96 | |
+| callstation | +410 | |
+| maniac | +840 | was +490 without the model |
+
+Honest read: the tuning is a modest gain and was fit to a pool of *my own* bots, so it says
+little about the real field. The model's value is exploiting extremes (maniac, station).
+Tuning hurts vs maniac if you look unclipped (+803 original → +490 tuned-static).
+
+## Tuning
+
+`python -m pokerbot.tune --iters 400` perturbs one param at a time and keeps it if it wins on
+fresh deals vs a pool (basic0, tight, loose, callstation, maniac, random; results clipped at
+120 so dummies don't dominate). `--validate` re-checks on unseen seeds. Takes ~11 min on 4 cores.
 
 ## Caveats
 

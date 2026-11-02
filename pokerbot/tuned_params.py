@@ -1,0 +1,28 @@
+"""Output of tune.py (hill-climbed vs a pool of opponents). Overrides ORIGINAL_PARAMS."""
+TUNED_PARAMS = {
+    "open_eq": 0.586,
+    "limp_eq": 0.425,
+    "iso_eq": 0.586,
+    "open_size": 2.521,
+    "iso_size": 2.786,
+    "threebet_eq": 0.659,
+    "threebet_bluff": 0.06,
+    "threebet_size": 3.343,
+    "fourbet_eq": 0.826,
+    "pre_margin": 0.236,
+    "value_eq": 0.804,
+    "value_size": 1.102,
+    "med_eq": 0.589,
+    "med_size": 0.857,
+    "med_freq": 0.788,
+    "weak_eq": 0.411,
+    "weak_freq": 0.13,
+    "weak_size": 0.358,
+    "air_freq": 0.148,
+    "air_size": 0.725,
+    "call_margin": 0.1,
+    "raise_eq": 0.815,
+    "raise_mid_freq": 1.0,
+    "raise_size": 0.748,
+    "bluff_raise_freq": 0.088
+}

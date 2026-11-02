@@ -186,16 +186,22 @@ class OpponentModel:
 class BasicBot:
     name = "basic"
 
-    def __init__(self, seed: int = 0, params=None, adapt: bool = True):
+    # Measured (see README): "margin" and "value" help; "bluff" and "open" lose money, so off.
+    ADAPT_DEFAULT = ("margin", "value")
+
+    def __init__(self, seed: int = 0, params=None, adapt=True):
+        """adapt: False, True (= ADAPT_DEFAULT), or an iterable of components
+        from {"bluff", "open", "margin", "value"}."""
         self.rng = random.Random(seed)
         self.p = dict(DEFAULT_PARAMS)
         if params:
             self.p.update(params)
         self.adapt = adapt
+        self.components = frozenset(self.ADAPT_DEFAULT if adapt is True else (adapt or ()))
         self.model = OpponentModel()
 
     def on_hand_end(self, summary) -> None:
-        if self.adapt:
+        if self.components:
             self.model.update(summary)
 
     def act(self, s):
@@ -207,14 +213,16 @@ class BasicBot:
     def _adj(self):
         """Returns (bluff_mult, open_shift, margin_shift, value_shift)."""
         m = self.model
-        if not self.adapt or m.hands < 60:
+        if not self.components or m.hands < 60:
             return 1.0, 0.0, 0.0, 0.0
         f = m.fold_to_bet
         bluff = max(0.0, min(3.0, (f - 0.15) / 0.25))      # folds a lot -> bluff more, never vs stations
         open_shift = -0.10 * max(-1.0, min(1.0, (m.fold_to_open - 0.35) / 0.3))
         margin = -0.06 * max(-1.0, min(1.0, (m.aggression - 0.35) / 0.3))  # maniac -> call lighter
         value = -0.06 * max(0.0, min(1.0, (0.35 - f) / 0.25))             # stations -> value bet thinner
-        return bluff, open_shift, margin, value
+        c = self.components
+        return (bluff if "bluff" in c else 1.0, open_shift if "open" in c else 0.0,
+                margin if "margin" in c else 0.0, value if "value" in c else 0.0)
 
     # ------------------------------------------------------------------
     def _preflop(self, s):

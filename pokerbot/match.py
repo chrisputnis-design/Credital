@@ -111,14 +111,14 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("bot_a")
     p.add_argument("bot_b", nargs="?")
-    p.add_argument("--vs", help="'all' to play bot_a against every builtin bot")
+    p.add_argument("--vs", help="'all' = every builtin bot, or a bot name/spec")
     p.add_argument("--hands", type=int, default=4000)
     p.add_argument("--seed", type=int, default=1)
     p.add_argument("--stack", type=int, default=100, help="starting stack in big blinds")
     p.add_argument("--no-duplicate", action="store_true")
     args = p.parse_args()
 
-    opponents = list(BOTS) if args.vs == "all" else [args.bot_b]
+    opponents = list(BOTS) if args.vs == "all" else [args.vs or args.bot_b]
     if opponents == [None]:
         p.error("give bot_b or --vs all")
     cls_a = load_bot(args.bot_a)

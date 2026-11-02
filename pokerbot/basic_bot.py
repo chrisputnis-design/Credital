@@ -109,23 +109,117 @@ def postflop_strength(hole, board) -> float:
     return made
 
 
+# Original hand-guessed thresholds (kept as the baseline to beat).
+ORIGINAL_PARAMS = dict(
+    open_eq=0.52, limp_eq=0.40, iso_eq=0.62, open_size=2.5, iso_size=3.0,
+    threebet_eq=0.72, threebet_bluff=0.08, threebet_size=3.2,
+    fourbet_eq=0.78, pre_margin=0.14,
+    value_eq=0.72, value_size=0.7, med_eq=0.55, med_size=0.5, med_freq=0.7,
+    weak_eq=0.35, weak_freq=0.25, weak_size=0.4, air_freq=0.10, air_size=0.4,
+    call_margin=0.10, raise_eq=0.85, raise_mid_freq=0.4, raise_size=0.75,
+    bluff_raise_freq=0.05,
+)
+DEFAULT_PARAMS = dict(ORIGINAL_PARAMS)  # overwritten below by tuned values (tuned_params.py)
+try:
+    from .tuned_params import TUNED_PARAMS
+    DEFAULT_PARAMS.update(TUNED_PARAMS)
+except ImportError:
+    pass
+
+
+class OpponentModel:
+    """Smoothed frequencies of what the opponent does, from on_hand_end summaries."""
+
+    def __init__(self):
+        self.hands = 0
+        self.pre_open_faced = 0     # times we raised preflop (unraised pot) and opp responded
+        self.pre_open_folds = 0
+        self.post_bets_faced = 0    # opp responses to our postflop bet/raise
+        self.post_bet_folds = 0
+        self.post_opp_raises = 0    # opp postflop aggressive actions vs passive
+        self.post_opp_calls = 0
+
+    def update(self, summary):
+        me = 0 if summary.is_button else 1
+        self.hands += 1
+        cur_street = -1
+        last_raiser = None   # who made the latest raise on the current street
+        pre_raises = 0
+        for street, pl, kind, _amt in summary.history:
+            if street != cur_street:
+                cur_street, last_raiser = street, None
+            if pl != me:
+                if street == 0:
+                    if last_raiser == me and pre_raises == 1:   # response to our open
+                        self.pre_open_faced += 1
+                        self.pre_open_folds += kind == 0
+                else:
+                    if last_raiser == me:                       # response to our bet
+                        self.post_bets_faced += 1
+                        self.post_bet_folds += kind == 0
+                    if kind == RAISE:
+                        self.post_opp_raises += 1
+                    elif kind == 1:
+                        self.post_opp_calls += 1
+            if kind == RAISE:
+                last_raiser = pl
+                if street == 0:
+                    pre_raises += 1
+
+    @staticmethod
+    def _rate(k, n, prior, w=20):
+        return (k + prior * w) / (n + w)
+
+    @property
+    def fold_to_bet(self):  # postflop
+        return self._rate(self.post_bet_folds, self.post_bets_faced, 0.40)
+
+    @property
+    def fold_to_open(self):
+        return self._rate(self.pre_open_folds, self.pre_open_faced, 0.35)
+
+    @property
+    def aggression(self):
+        return self._rate(self.post_opp_raises, self.post_opp_raises + self.post_opp_calls, 0.35)
+
+
 class BasicBot:
     name = "basic"
 
-    def __init__(self, seed: int = 0):
+    def __init__(self, seed: int = 0, params=None, adapt: bool = True):
         self.rng = random.Random(seed)
+        self.p = dict(DEFAULT_PARAMS)
+        if params:
+            self.p.update(params)
+        self.adapt = adapt
+        self.model = OpponentModel()
 
-    # --- optional hook: called after every hand (use for opponent modelling) ---
     def on_hand_end(self, summary) -> None:
-        pass
+        if self.adapt:
+            self.model.update(summary)
 
     def act(self, s):
         if s.street == 0:
             return self._preflop(s)
         return self._postflop(s)
 
+    # --- exploit adjustments (neutral until enough hands are seen) ---
+    def _adj(self):
+        """Returns (bluff_mult, open_shift, margin_shift, value_shift)."""
+        m = self.model
+        if not self.adapt or m.hands < 60:
+            return 1.0, 0.0, 0.0, 0.0
+        f = m.fold_to_bet
+        bluff = max(0.0, min(3.0, (f - 0.15) / 0.25))      # folds a lot -> bluff more, never vs stations
+        open_shift = -0.10 * max(-1.0, min(1.0, (m.fold_to_open - 0.35) / 0.3))
+        margin = -0.06 * max(-1.0, min(1.0, (m.aggression - 0.35) / 0.3))  # maniac -> call lighter
+        value = -0.06 * max(0.0, min(1.0, (0.35 - f) / 0.25))             # stations -> value bet thinner
+        return bluff, open_shift, margin, value
+
     # ------------------------------------------------------------------
     def _preflop(self, s):
+        p = self.p
+        bluff, open_shift, margin, _ = self._adj()
         eq = preflop_equity(s.hole)
         bb = s.big_blind
         c = s.to_call
@@ -135,44 +229,45 @@ class BasicBot:
 
         if n_raises == 0:
             if s.is_button:  # small blind, first to act
-                if eq >= 0.52:
-                    return raise_to(s, 2.5 * bb)
-                return CALL_ACTION if eq >= 0.40 else FOLD_ACTION
-            # big blind after a limp
-            return raise_to(s, 3 * bb) if eq >= 0.62 else CALL_ACTION
+                if eq >= p["open_eq"] + open_shift:
+                    return raise_to(s, p["open_size"] * bb)
+                return CALL_ACTION if eq >= p["limp_eq"] else FOLD_ACTION
+            return raise_to(s, p["iso_size"] * bb) if eq >= p["iso_eq"] else CALL_ACTION
 
         odds = c / (pot + c) if c else 0.0
+        pm = p["pre_margin"] + margin
         if n_raises == 1:  # facing an open
-            if eq >= 0.72 or (eq >= 0.50 and r < 0.08):
-                return raise_to(s, 3.2 * s.opp_bet)
-            return CALL_ACTION if eq >= odds + 0.14 else FOLD_ACTION
-        # facing a 3-bet or more
-        if eq >= 0.78:
+            if eq >= p["threebet_eq"] or (eq >= 0.50 and r < p["threebet_bluff"] * bluff):
+                return raise_to(s, p["threebet_size"] * s.opp_bet)
+            return CALL_ACTION if eq >= odds + pm else FOLD_ACTION
+        if eq >= p["fourbet_eq"]:  # facing a 3-bet or more
             return raise_to(s, s.max_raise_to if s.opp_bet > 0.2 * (s.my_bet + s.my_stack)
                             else 2.3 * s.opp_bet)
-        return CALL_ACTION if eq >= odds + 0.14 else FOLD_ACTION
+        return CALL_ACTION if eq >= odds + pm else FOLD_ACTION
 
     # ------------------------------------------------------------------
     def _postflop(self, s):
+        p = self.p
+        bluff, _, margin, value = self._adj()
         st = postflop_strength(s.hole, s.board)
         pot = s.pot
         c = s.to_call
         r = self.rng.random()
 
         if c == 0:
-            if st >= 0.72:
-                return raise_to(s, 0.7 * pot)
-            if st >= 0.55:
-                return raise_to(s, 0.5 * pot) if r < 0.7 else CALL_ACTION
-            if st >= 0.35:
-                return raise_to(s, 0.4 * pot) if r < 0.25 else CALL_ACTION
-            return raise_to(s, 0.4 * pot) if r < 0.10 else CALL_ACTION
+            if st >= p["value_eq"] + value:
+                return raise_to(s, p["value_size"] * pot)
+            if st >= p["med_eq"] + value:
+                return raise_to(s, p["med_size"] * pot) if r < p["med_freq"] else CALL_ACTION
+            if st >= p["weak_eq"]:
+                return raise_to(s, p["weak_size"] * pot) if r < p["weak_freq"] * bluff else CALL_ACTION
+            return raise_to(s, p["air_size"] * pot) if r < p["air_freq"] * bluff else CALL_ACTION
 
         odds = c / (pot + c)
-        if st >= 0.85 or (st >= 0.72 and r < 0.4):
-            return raise_to(s, s.opp_bet + 0.75 * (pot + c))
-        if st >= odds + 0.10:
+        if st >= p["raise_eq"] or (st >= p["value_eq"] and r < p["raise_mid_freq"]):
+            return raise_to(s, s.opp_bet + p["raise_size"] * (pot + c))
+        if st >= odds + p["call_margin"] + margin:
             return CALL_ACTION
-        if r < 0.05 and c <= 0.5 * pot:
-            return raise_to(s, s.opp_bet + 0.75 * (pot + c))  # occasional bluff-raise
+        if r < p["bluff_raise_freq"] * bluff and c <= 0.5 * pot:
+            return raise_to(s, s.opp_bet + p["raise_size"] * (pot + c))
         return FOLD_ACTION

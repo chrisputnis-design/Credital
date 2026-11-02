@@ -5,7 +5,7 @@ import importlib
 import importlib.util
 import random
 
-from .basic_bot import BasicBot
+from .basic_bot import ORIGINAL_PARAMS, BasicBot
 from .engine import CALL_ACTION, FOLD_ACTION, raise_to
 
 
@@ -50,7 +50,44 @@ class FoldBot:
         return FOLD_ACTION if s.to_call else CALL_ACTION
 
 
-BOTS = {c.name: c for c in (BasicBot, RandomBot, CallStation, Maniac, FoldBot)}
+class _Preset(BasicBot):
+    """BasicBot with fixed parameter overrides and no adaptation (a 'style' to test against)."""
+    overrides: dict = {}
+
+    def __init__(self, seed: int = 0):
+        super().__init__(seed=seed, params=self.overrides, adapt=False)
+
+
+class Basic0(_Preset):
+    """The original hand-guessed BasicBot: the baseline every tuning step must beat."""
+    name = "basic0"
+    overrides = ORIGINAL_PARAMS
+
+
+class Static(_Preset):
+    """Current (tuned) parameters but no opponent modelling."""
+    name = "static"
+
+
+class Tight(_Preset):
+    """Nit: plays few hands, folds to pressure, rarely bluffs."""
+    name = "tight"
+    overrides = dict(open_eq=0.60, limp_eq=0.50, iso_eq=0.70, threebet_eq=0.78,
+                     threebet_bluff=0.0, pre_margin=0.20, call_margin=0.18, value_eq=0.78,
+                     med_eq=0.64, weak_freq=0.08, air_freq=0.02, bluff_raise_freq=0.0)
+
+
+class Loose(_Preset):
+    """Loose-aggressive: wide ranges, lots of bluffs and raises."""
+    name = "loose"
+    overrides = dict(open_eq=0.42, limp_eq=0.34, iso_eq=0.50, threebet_eq=0.62,
+                     threebet_bluff=0.20, pre_margin=0.06, call_margin=0.03, value_eq=0.62,
+                     med_eq=0.45, weak_freq=0.5, air_freq=0.35, bluff_raise_freq=0.15,
+                     raise_mid_freq=0.6)
+
+
+BOTS = {c.name: c for c in (BasicBot, Basic0, Static, Tight, Loose, RandomBot,
+                            CallStation, Maniac, FoldBot)}
 
 
 def load_bot(spec: str):

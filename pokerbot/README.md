@@ -31,6 +31,7 @@ removes most card luck. Use `--no-duplicate` if a bot learns from repeated deals
 | `basic_bot.py` | the baseline bot (`BasicBot`) |
 | `bots.py` | dummy opponents (random, callstation, maniac, folder) + loader |
 | `match.py` | match runner, timing, stats |
+| `web/` | browser version of the game: `poker.js` (JS port of evaluator/engine/BasicBot), `template.html`; `python -m pokerbot.web.build` writes `index.html` (re-run after retuning) |
 | `gen_preflop.py` | regenerates `preflop_table.py` (equity of 169 hand classes vs random) |
 
 ## Bot interface
